@@ -473,28 +473,32 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       margin-bottom: 0 !important;
                     }
 
+                    /* Dribbble-inspired mockups container - keep horizontal layout */
                     .mobile-layout .case-study-mockups {
                       position: relative;
                       width: 100%;
                       height: auto;
-                      min-height: auto !important; /* Remove fixed min-height */
+                      min-height: auto !important;
                       display: flex !important;
-                      flex-direction: column !important;
+                      flex-direction: row !important; /* Keep horizontal for Dribbble style */
+                      flex-wrap: wrap !important;
                       gap: 1.5rem !important;
                       align-items: center !important;
+                      justify-content: center !important;
                       max-height: none !important;
                       margin-top: 0 !important;
                     }
 
-                    /* Stack images vertically with proper spacing - MOBILE SCREENSHOTS */
+                    /* Dribbble-style mockups - subtle rotations, stagger, depth */
                     .mobile-layout .mockup-primary {
                       position: relative !important;
                       width: 60% !important;
                       max-width: 200px !important;
                       height: auto !important;
-                      transform: none !important;
-                      z-index: 1;
-                      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.15), 0 8px 24px rgba(0, 255, 255, 0.12) !important;
+                      transform: rotate(-2deg) translateY(-8px) !important;
+                      z-index: 3 !important;
+                      box-shadow: 0 8px 20px rgba(255, 0, 255, 0.2), 0 12px 32px rgba(0, 255, 255, 0.15) !important;
+                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
                       top: auto !important;
                       left: auto !important;
                       right: auto !important;
@@ -506,9 +510,10 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       width: 56% !important;
                       max-width: 185px !important;
                       height: auto !important;
-                      transform: none !important;
-                      z-index: 1;
-                      box-shadow: 0 3px 10px rgba(255, 0, 255, 0.12), 0 6px 20px rgba(0, 255, 255, 0.1) !important;
+                      transform: rotate(1.5deg) translateY(4px) !important;
+                      z-index: 2 !important;
+                      box-shadow: 0 6px 16px rgba(255, 0, 255, 0.16), 0 10px 28px rgba(0, 255, 255, 0.12) !important;
+                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
                       top: auto !important;
                       left: auto !important;
                       right: auto !important;
@@ -520,22 +525,28 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       width: 52% !important;
                       max-width: 170px !important;
                       height: auto !important;
-                      transform: none !important;
-                      z-index: 1;
-                      box-shadow: 0 2px 8px rgba(255, 0, 255, 0.1), 0 4px 16px rgba(0, 255, 255, 0.09) !important;
+                      transform: rotate(-1deg) translateY(0px) !important;
+                      z-index: 1 !important;
+                      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.12), 0 8px 24px rgba(0, 255, 255, 0.1) !important;
+                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
                       top: auto !important;
                       left: auto !important;
                       right: auto !important;
                       bottom: auto !important;
                     }
 
-                    /* Reset active image transforms on mobile */
+                    /* Active state - enhanced interaction */
                     .mobile-layout .mockup-primary.active-mobile,
                     .mobile-layout .mockup-secondary.active-mobile,
                     .mobile-layout .mockup-tertiary.active-mobile {
-                      transform: scale(1.08) !important;
+                      transform: scale(1.05) rotate(0deg) !important;
                       z-index: 10 !important;
-                      box-shadow: 0 8px 24px rgba(255, 0, 255, 0.3), 0 12px 32px rgba(0, 255, 255, 0.25) !important;
+                      box-shadow: 0 12px 32px rgba(255, 0, 255, 0.35), 0 16px 48px rgba(0, 255, 255, 0.3) !important;
+                    }
+
+                    /* Single image - centered with subtle tilt */
+                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
+                      transform: rotate(-1.5deg) !important;
                     }
 
                     /* Desktop layout panels - proper padding and spacing */
@@ -757,6 +768,50 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .mobile-layout .mockup-tertiary {
                       max-width: 130px !important;
                       width: 48% !important;
+                    }
+                  }
+
+                  /* ===== PROFESSOR TOOLS - SMALL SCREENS (below 400px) ===== */
+                  @media (max-width: 400px) {
+                    /* Intro panel - smaller titles and better padding */
+                    .intro-panel {
+                      padding: 2.5rem 1.25rem !important;
+                      padding-bottom: 8.5rem !important;
+                    }
+
+                    .intro-panel h1 {
+                      font-size: 2.25rem !important; /* Reduced from text-6xl */
+                      line-height: 1.2 !important;
+                    }
+
+                    .intro-panel p {
+                      font-size: 1rem !important; /* Reduced from text-xl */
+                    }
+
+                    /* Feature panels - smaller headers and better spacing */
+                    .case-study-panel {
+                      padding: 2rem 1.25rem !important;
+                      padding-bottom: 8.5rem !important;
+                    }
+
+                    .case-study-text-content h2 {
+                      font-size: 1.875rem !important; /* text-3xl instead of text-4xl/5xl */
+                      line-height: 1.25 !important;
+                    }
+
+                    .case-study-text-content p {
+                      font-size: 0.95rem !important;
+                    }
+
+                    /* Desktop layout - ensure proper spacing on small screens */
+                    .case-study-panel:has(.desktop-layout) {
+                      padding: 2rem 1.25rem !important;
+                      padding-bottom: 8.5rem !important;
+                    }
+
+                    .case-study-panel:has(.desktop-layout) h2 {
+                      font-size: 1.875rem !important;
+                      line-height: 1.25 !important;
                     }
                   }
                 `}
