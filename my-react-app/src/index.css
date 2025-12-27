@@ -1,0 +1,534 @@
+/* ====================================
+   IMPORTS - Must come first!
+   ==================================== */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+@import "tailwindcss";
+
+/* ====================================
+   CSS VARIABLES & THEME
+   ==================================== */
+@layer base {
+  :root {
+    /* Colors - Dark Mode Default - Matrix Dream */
+    --bg-primary: #000F08;
+    --bg-secondary: #001B11;
+    --bg-tertiary: #00291A;
+    --text-primary: #E0FFE0;
+    --text-secondary: #A8FFC8;
+    --text-tertiary: #70D99A;
+    --accent-cyan: #00FF9F;
+    --accent-pink: #FF0099;
+    --accent-amber: #FFD700;
+    --pixel-border: #00FF9F;
+    --gradient-start: #000F08;
+    --gradient-end: #001B11;
+
+    /* Spacing */
+    --section-padding: 8rem;
+
+    /* Typography */
+    --font-pixel: 'Orbitron', 'Share Tech Mono', monospace;
+    --font-tech: 'Rajdhani', sans-serif;
+  }
+
+  [data-theme="light"] {
+    /* Light Mode - Clean Voltage */
+    --bg-primary: #FCFCFC;
+    --bg-secondary: #F4F6FA;
+    --bg-tertiary: #EBF0F7;
+    --text-primary: #0D1B2A;
+    --text-secondary: #1B2838;
+    --text-tertiary: #2E3F52;
+    --accent-cyan: #00B8D4;
+    --accent-pink: #D81B60;
+    --accent-amber: #FFB300;
+    --pixel-border: #00B8D4;
+    --gradient-start: #FCFCFC;
+    --gradient-end: #EBF0F7;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Scanline effect */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(0, 240, 255, 0.02) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* ====================================
+   PIXEL ANIMATION KEYFRAMES
+   ==================================== */
+@keyframes pixelReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(-8px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pixelGlitch {
+  0%, 100% {
+    transform: translate(0, 0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, 0);
+    filter: hue-rotate(10deg);
+  }
+  40% {
+    transform: translate(2px, 1px);
+    filter: hue-rotate(-10deg);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+    filter: hue-rotate(5deg);
+  }
+  80% {
+    transform: translate(1px, 0);
+    filter: hue-rotate(-5deg);
+  }
+}
+
+@keyframes pixelBorderDraw {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pixelAssemble {
+  0% {
+    opacity: 0;
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(0);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes pixelDissolve {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(0);
+  }
+}
+
+@keyframes pixelPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--accent-cyan);
+  }
+  50% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes pixelRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pixelBlink {
+  0%, 49%, 100% {
+    opacity: 1;
+  }
+  50%, 99% {
+    opacity: 0;
+  }
+}
+
+@keyframes rgbSplit {
+  0%, 100% {
+    text-shadow:
+      -2px -2px 0 var(--accent-cyan),
+      2px 2px 0 var(--accent-pink);
+  }
+  50% {
+    text-shadow:
+      2px -2px 0 var(--accent-cyan),
+      -2px 2px 0 var(--accent-pink);
+  }
+}
+
+@keyframes pixelTextGlitch {
+  0% {
+    transform: translate(0, 0);
+    text-shadow: none;
+  }
+  25% {
+    transform: translate(-4px, 0);
+    text-shadow:
+      2px 0 0 rgba(0, 240, 255, 0.7),
+      -2px 0 0 rgba(255, 0, 110, 0.7);
+  }
+  50% {
+    transform: translate(4px, 0);
+    text-shadow:
+      -3px 0 0 rgba(0, 240, 255, 0.8),
+      3px 0 0 rgba(255, 0, 110, 0.8);
+  }
+  75% {
+    transform: translate(-2px, 0);
+    text-shadow:
+      2px 0 0 rgba(0, 240, 255, 0.6),
+      -2px 0 0 rgba(255, 0, 110, 0.6);
+  }
+  100% {
+    transform: translate(0, 0);
+    text-shadow: none;
+  }
+}
+
+
+@keyframes degradeIn {
+  0% {
+    filter: blur(8px) brightness(0.5);
+    opacity: 0;
+  }
+  50% {
+    filter: blur(0px) brightness(1.2);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(0px) brightness(1);
+    opacity: 1;
+  }
+}
+
+/* ====================================
+   TERMINAL / SYSTEM BOOT EFFECTS
+   ==================================== */
+@keyframes terminalFlicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  10% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes digitalDecode {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+    filter: blur(4px);
+  }
+  30% {
+    opacity: 0.3;
+    filter: blur(2px);
+  }
+  60% {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes pixelDecode {
+  0% {
+    opacity: 0;
+    text-shadow:
+      -2px 0 0 var(--accent-cyan),
+      2px 0 0 var(--accent-pink),
+      0 -2px 0 var(--accent-amber);
+    filter: blur(3px);
+  }
+  25% {
+    opacity: 0.4;
+    text-shadow:
+      -1px 0 0 var(--accent-cyan),
+      1px 0 0 var(--accent-pink);
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+  75% {
+    opacity: 0.9;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes scanlineReveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes glitchJitter {
+  0%, 90%, 100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-1px, 1px);
+    opacity: 0.95;
+  }
+  40% {
+    transform: translate(1px, -1px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(-1px, -1px);
+    opacity: 0.95;
+  }
+  80% {
+    transform: translate(1px, 1px);
+    opacity: 0.92;
+  }
+}
+
+/* ====================================
+   PIXEL LOADER SPRITES
+   ==================================== */
+@keyframes pixelLoader {
+  0% { background-position: 0 0; }
+  12.5% { background-position: -16px 0; }
+  25% { background-position: -32px 0; }
+  37.5% { background-position: -48px 0; }
+  50% { background-position: -64px 0; }
+  62.5% { background-position: -80px 0; }
+  75% { background-position: -96px 0; }
+  87.5% { background-position: -112px 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ====================================
+   UTILITY CLASSES
+   ==================================== */
+@layer utilities {
+  .pixel-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .pixel-border {
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .pixel-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      135deg,
+      var(--accent-cyan),
+      var(--accent-pink)
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.8;
+  }
+
+  .glow-cyan {
+    box-shadow:
+      0 0 20px rgba(0, 240, 255, 0.3),
+      0 0 40px rgba(0, 240, 255, 0.1);
+  }
+
+  .glow-pink {
+    box-shadow:
+      0 0 20px rgba(255, 0, 110, 0.3),
+      0 0 40px rgba(255, 0, 110, 0.1);
+  }
+
+  .text-glow {
+    text-shadow:
+      0 0 10px currentColor,
+      0 0 20px currentColor;
+  }
+
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      var(--accent-cyan),
+      var(--accent-pink)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .pixel-grid-bg {
+    background-image:
+      linear-gradient(var(--bg-tertiary) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-tertiary) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .glitch-text:hover {
+    animation: pixelTextGlitch 180ms steps(4) forwards;
+  }
+}
+
+/* ====================================
+   CUSTOM CURSOR
+   ==================================== */
+.pixel-cursor {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent-cyan);
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+
+.pixel-cursor.active {
+  transform: scale(1.5);
+  border-color: var(--accent-pink);
+}
+
+/* ====================================
+   CUSTOM SCROLLBAR
+   ==================================== */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan);
+  border: 2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-pink);
+}
+
+/* ====================================
+   SELECTION
+   ==================================== */
+::selection {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}

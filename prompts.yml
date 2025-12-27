@@ -1,0 +1,145 @@
+Objective:
+Go through my entire codebase and optimize performance, structure, and animations, especially those that impact load time, smoothness, or responsiveness.
+
+Focus Areas:
+
+Hero Section / On-Scroll Animations
+
+The text pixel-encoded reveal animation triggers on scroll.
+
+Optimize it for smoothness and efficiency without losing the pixel/glitch effect.
+
+Reduce unnecessary DOM operations, reflows, or redundant animation calls.
+
+Light/Dark Mode Toggle
+
+The color switch animation is currently too slow.
+
+Make the transition faster, smoother, and glitch-friendly, while keeping the staggered block/letter effect.
+
+Ensure both light and dark mode palettes remain distinct, readable, and visually appealing.
+
+Global Animation Performance
+
+Review all other micro-animations, transitions, and hover effects.
+
+Identify any CPU-heavy or blocking animations.
+
+Suggest improvements like CSS transitions vs JS, requestAnimationFrame usage, or GPU-accelerated transforms.
+
+Code Quality & Structure
+
+Remove any redundant CSS, inline styles, or duplicate JS logic.
+
+Ensure React components are efficient, reusable, and lightweight.
+
+Check Tailwind usage for unnecessary utilities or conflicts.
+
+Responsiveness & Consistency
+
+Ensure all animations and layout changes work smoothly across screen sizes.
+
+Verify that the pixel-art style and glitch effects are preserved without causing jitter or layout shifts.
+
+Deliverables:
+
+Optimized code snippets or rewritten components for all affected animations.
+
+Suggestions for further performance improvements.
+
+Notes on any visual trade-offs if needed for performance.
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+i want you to suggest color palettes for each mode before coding anything : 
+I want the light mode to use bolder, more vibrant colors that make content pop and feel energetic, while keeping the background clean and bright.
+
+For the dark mode, the background should be deeper and more saturated, creating strong contrast, while the content colors should be distinct and standalone, clearly visible against the dark backdrop and visually separated from the background.
+
+The goal is to create two complementary modes where:
+
+Light mode feels lively and bold
+
+Dark mode feels moody, high-contrast, and refined
+
+Both modes maintain a clear visual hierarchy and preserve readability.
+
+
+
+
+
+
+
+---------------è
+
+
+
+Create a reusable Modal component to be used in the Selected Work section.
+
+Behavior & Animation :
+
+- When a project card is clicked, open the modal with a lightweight glitch-style reveal.
+
+- The animation should be fast, subtle, and performant.
+
+- Avoid heavy effects or overengineered animation logic.
+
+Modal Usage & Structure :
+
+Project 1 — SaaS Application: 
+
+SaaS app featuring embedded Power BI
+
+Includes Admin app and User app (just update the content inside each one of the already existing two cards for each section)
+
+The modal should display:
+
+A visual preview (image or video)
+
+clear link: Live Demo — Admin or user App depending on the clicked card
+
+
+Project 2 — E-commerce Web App (Books)
+
+Book-selling e-commerce platform
+
+Includes User app and Admin app (two cards already set up, just update their content)
+
+The modal should display:
+
+Video demos for the app that is selected (clicked card)
+
+No live demo links (videos or pics only)
+
+Project 3 — Figma Mockups (add this section)
+
+Add a third category dedicated to Figma mockups (two cards for two projects too (user and admin apps))
+
+Inside the modal: same logic as the the project above it but for pics (figma mockups)
+
+Layout Changes :
+
+Rearrange the Selected Work section to follow the structure described above
+
+Ensure the layout is clear, scalable, and consistent with the rest of the site
+
+Constraints
+
+Keep the Modal component generic and reusable
+
+Do not introduce unnecessary dependencies
+
+Prioritize clarity, performance, and maintainability
+
+Match the site’s pixel / modern / digital aesthetic
+
+Only implement what is required to achieve this behavior.

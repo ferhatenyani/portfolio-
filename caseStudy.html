@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased text-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediMind AI - Case Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        /* Custom Font Setup */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        /* Horizontal Scroll Container */
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            height: 100vh;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .horizontal-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .horizontal-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Panel Sections */
+        .panel {
+            min-width: 100vw;
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 4rem;
+            position: relative;
+        }
+
+        /* Panel Content Container */
+        .panel-content {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        /* Text Content */
+        .text-content {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Mockups Container */
+        .mockups-horizontal {
+            flex: 1;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Device Frame */
+        .device-frame {
+            border-radius: 1.25rem;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.06);
+            aspect-ratio: 9/19.5;
+            transition: all 0.3s ease;
+        }
+
+        .device-frame:hover {
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.06),
+                0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* Image Handling */
+        .mockup-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #f1f5f9;
+        }
+
+        /* Device Sizes for Horizontal Layout */
+        .device-primary {
+            height: 65vh;
+            max-height: 600px;
+        }
+
+        .device-secondary {
+            height: 50vh;
+            max-height: 460px;
+        }
+
+        .device-tertiary {
+            height: 42vh;
+            max-height: 380px;
+        }
+
+        /* Panel Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem 1.25rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #4f46e5;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Section Label */
+        .section-label {
+            font-size: 0.625rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 0.9375rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Panel Background Colors */
+        .panel:nth-child(1) { background-color: #fafafa; }
+        .panel:nth-child(2) { background-color: #f8fafc; }
+        .panel:nth-child(3) { background-color: #fafafa; }
+        .panel:nth-child(4) { background-color: #f8fafc; }
+        .panel:nth-child(5) { background-color: #fafafa; }
+
+        /* Intro Panel Specific */
+        .intro-panel {
+            justify-content: center;
+        }
+
+        .intro-content {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .intro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-title {
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .intro-description {
+            font-size: 1.125rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* ===== MOBILE RESPONSIVE STYLES ===== */
+
+        /* Tablets and small laptops (max-width: 1024px) */
+        @media (max-width: 1024px) {
+            .panel {
+                padding: 2.5rem 2rem;
+            }
+
+            .panel-content {
+                gap: 2rem;
+            }
+
+            .text-content {
+                flex: 0 0 280px;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .intro-title {
+                font-size: 3rem;
+            }
+
+            .device-primary {
+                height: 55vh;
+                max-height: 500px;
+            }
+
+            .device-secondary {
+                height: 45vh;
+                max-height: 400px;
+            }
+
+            .device-tertiary {
+                height: 38vh;
+                max-height: 340px;
+            }
+        }
+
+        /* Tablets portrait and landscape (max-width: 900px) */
+        @media (max-width: 900px) {
+            .panel {
+                padding: 2rem 1.5rem;
+            }
+
+            .panel-content {
+                flex-direction: column;
+                gap: 2rem;
+                justify-content: center;
+            }
+
+            .text-content {
+                flex: 0 0 auto;
+                text-align: center;
+                max-width: 500px;
+            }
+
+            .mockups-horizontal {
+                gap: 1.5rem;
+                width: 100%;
+                max-width: 600px;
+            }
+
+            .device-primary {
+                height: 45vh;
+                max-height: 420px;
+            }
+
+            .device-secondary {
+                height: 38vh;
+                max-height: 360px;
+            }
+
+            .device-tertiary {
+                height: 32vh;
+                max-height: 300px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .intro-title {
+                font-size: 2.5rem;
+            }
+
+            .intro-description {
+                font-size: 1rem;
+            }
+        }
+
+        /* Mobile landscape and small tablets (max-width: 768px) */
+        @media (max-width: 768px) {
+            .panel {
+                padding: 1.5rem 1.25rem;
+                padding-bottom: 5rem;
+            }
+
+            .mockups-horizontal {
+                gap: 1rem;
+            }
+
+            .device-primary {
+                height: 40vh;
+                max-height: 380px;
+            }
+
+            .device-secondary {
+                height: 34vh;
+                max-height: 320px;
+            }
+
+            .device-tertiary {
+                height: 28vh;
+                max-height: 260px;
+            }
+
+            .section-title {
+                font-size: 1.375rem;
+            }
+
+            .section-description {
+                font-size: 0.875rem;
+            }
+
+            .intro-title {
+                font-size: 2.25rem;
+            }
+
+            .nav-dots {
+                bottom: 1.5rem;
+                padding: 0.625rem 1rem;
+            }
+        }
+
+        /* ===== DIAGONAL CASCADE LAYOUT - Mobile Portrait ===== */
+        @media (max-width: 640px) {
+            .panel {
+                padding: 1.5rem 1rem;
+                padding-bottom: 5.5rem;
+                overflow-y: visible;
+            }
+
+            .panel-content {
+                flex-direction: column;
+                gap: 1.25rem;
+                justify-content: flex-start;
+                align-items: center;
+                height: auto;
+                min-height: calc(100vh - 6.5rem);
+            }
+
+            .text-content {
+                flex: 0 0 auto;
+                text-align: center;
+                gap: 0.625rem;
+                max-width: 100%;
+                z-index: 10;
+            }
+
+            .section-label {
+                font-size: 0.5625rem;
+            }
+
+            .section-title {
+                font-size: 1.375rem;
+                line-height: 1.3;
+            }
+
+            .section-description {
+                font-size: 0.8125rem;
+                line-height: 1.5;
+                max-width: 90%;
+                margin: 0 auto;
+            }
+
+            /* Diagonal Cascade Container */
+            .mockups-horizontal {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 420px;
+                display: block;
+                flex: 1;
+                max-height: calc(100vh - 220px);
+            }
+
+            /* Primary Device - Top Right, Rotated */
+            .device-primary {
+                position: absolute;
+                top: 0;
+                right: 5%;
+                width: 52%;
+                max-width: 180px;
+                height: auto;
+                transform: rotate(-4deg);
+                z-index: 3;
+                box-shadow:
+                    0 4px 12px rgba(0,0,0,0.1),
+                    0 8px 24px rgba(0,0,0,0.12);
+            }
+
+            /* Secondary Device - Center Left, Rotated */
+            .device-secondary {
+                position: absolute;
+                top: 28%;
+                left: 8%;
+                width: 48%;
+                max-width: 165px;
+                height: auto;
+                transform: rotate(3deg);
+                z-index: 2;
+                box-shadow:
+                    0 3px 10px rgba(0,0,0,0.09),
+                    0 6px 20px rgba(0,0,0,0.1);
+            }
+
+            /* Tertiary Device - Bottom Right, Rotated */
+            .device-tertiary {
+                position: absolute;
+                bottom: 0;
+                right: 12%;
+                width: 44%;
+                max-width: 155px;
+                height: auto;
+                transform: rotate(-2deg);
+                z-index: 1;
+                box-shadow:
+                    0 2px 8px rgba(0,0,0,0.08),
+                    0 4px 16px rgba(0,0,0,0.09);
+            }
+
+            .device-frame {
+                border-radius: 1rem;
+            }
+
+            .intro-title {
+                font-size: 2.25rem;
+            }
+
+            .intro-description {
+                font-size: 0.9375rem;
+            }
+
+            .intro-badge {
+                padding: 0.4rem 0.875rem;
+                font-size: 0.6875rem;
+            }
+
+            .nav-dots {
+                bottom: 1.5rem;
+                padding: 0.5rem 0.875rem;
+                gap: 0.375rem;
+            }
+
+            .nav-dot {
+                width: 6px;
+                height: 6px;
+            }
+
+            .nav-dot.active {
+                width: 18px;
+            }
+
+            /* Theme Panel Special Layout - Side by Side Flip */
+            .panel:nth-child(5) .mockups-horizontal {
+                display: flex;
+                flex-direction: row;
+                gap: 0.75rem;
+                min-height: 320px;
+                max-height: calc(100vh - 200px);
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div {
+                position: relative;
+                width: 48%;
+                max-width: 160px;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                transform: none;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div:first-child {
+                left: 0;
+                top: 0;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div:last-child {
+                right: 0;
+                top: 0;
+            }
+
+            .panel:nth-child(5) .device-frame {
+                position: relative;
+                width: 100%;
+                max-width: 100%;
+                transform: none;
+                box-shadow:
+                    0 2px 8px rgba(0,0,0,0.08),
+                    0 4px 16px rgba(0,0,0,0.1);
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div > div:first-child {
+                font-size: 0.5625rem;
+                gap: 0.375rem;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* Small mobile devices (max-width: 480px) */
+        @media (max-width: 480px) {
+            .panel {
+                padding: 1.25rem 0.875rem;
+                padding-bottom: 5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .section-description {
+                font-size: 0.75rem;
+            }
+
+            .mockups-horizontal {
+                min-height: 380px;
+                max-height: calc(100vh - 200px);
+            }
+
+            .device-primary {
+                max-width: 160px;
+                right: 3%;
+            }
+
+            .device-secondary {
+                max-width: 145px;
+                left: 5%;
+                top: 30%;
+            }
+
+            .device-tertiary {
+                max-width: 135px;
+                right: 8%;
+            }
+
+            .intro-title {
+                font-size: 2rem;
+            }
+
+            .intro-description {
+                font-size: 0.875rem;
+            }
+
+            .nav-dots {
+                bottom: 1.25rem;
+            }
+
+            /* Theme panel adjustments */
+            .panel:nth-child(5) .mockups-horizontal {
+                gap: 0.625rem;
+                min-height: 280px;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div {
+                max-width: 140px;
+            }
+        }
+
+        /* Very small screens (max-width: 375px) */
+        @media (max-width: 375px) {
+            .panel {
+                padding: 1rem 0.75rem;
+                padding-bottom: 4.75rem;
+            }
+
+            .panel-content {
+                gap: 1rem;
+                min-height: calc(100vh - 5.75rem);
+            }
+
+            .section-title {
+                font-size: 1.125rem;
+            }
+
+            .section-description {
+                font-size: 0.6875rem;
+                line-height: 1.45;
+            }
+
+            .section-label {
+                font-size: 0.5rem;
+                gap: 0.375rem;
+            }
+
+            .mockups-horizontal {
+                min-height: 350px;
+                max-height: calc(100vh - 180px);
+            }
+
+            .device-primary {
+                max-width: 145px;
+                width: 50%;
+            }
+
+            .device-secondary {
+                max-width: 130px;
+                width: 46%;
+            }
+
+            .device-tertiary {
+                max-width: 120px;
+                width: 42%;
+            }
+
+            .intro-title {
+                font-size: 1.75rem;
+            }
+
+            .intro-description {
+                font-size: 0.8125rem;
+                line-height: 1.5;
+            }
+
+            .intro-badge {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.625rem;
+                margin-bottom: 1rem;
+            }
+
+            .device-frame {
+                border-radius: 0.875rem;
+            }
+
+            .nav-dots {
+                bottom: 1rem;
+            }
+
+            /* Theme panel adjustments */
+            .panel:nth-child(5) .mockups-horizontal {
+                min-height: 250px;
+                gap: 0.5rem;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div {
+                max-width: 125px;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div > div:first-child {
+                font-size: 0.5rem;
+            }
+        }
+
+        /* Extra small screens (320px) */
+        @media (max-width: 320px) {
+            .panel {
+                padding: 0.875rem 0.625rem;
+                padding-bottom: 4.5rem;
+            }
+
+            .panel-content {
+                min-height: calc(100vh - 5.375rem);
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .section-description {
+                font-size: 0.625rem;
+            }
+
+            .mockups-horizontal {
+                min-height: 320px;
+                max-height: calc(100vh - 160px);
+            }
+
+            .device-primary {
+                max-width: 130px;
+                right: 2%;
+            }
+
+            .device-secondary {
+                max-width: 115px;
+                left: 3%;
+            }
+
+            .device-tertiary {
+                max-width: 105px;
+                right: 5%;
+            }
+
+            .intro-title {
+                font-size: 1.5rem;
+            }
+
+            .intro-description {
+                font-size: 0.75rem;
+            }
+
+            .intro-content {
+                max-width: 280px;
+            }
+
+            /* Theme panel adjustments */
+            .panel:nth-child(5) .mockups-horizontal {
+                min-height: 220px;
+            }
+
+            .panel:nth-child(5) .mockups-horizontal > div {
+                max-width: 110px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Horizontal Scroll Container -->
+    <div class="horizontal-scroll" id="scrollContainer">
+
+        <!-- Panel 0: Intro -->
+        <section class="panel intro-panel">
+            <div class="intro-content">
+                <div class="intro-badge">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                    <span>Case Study</span>
+                </div>
+                <h1 class="intro-title">MediMind AI</h1>
+                <p class="intro-description">
+                    An AI-powered medical education platform designed to support students through intelligent diagnostics, adaptive learning, and course correction.
+                </p>
+            </div>
+        </section>
+
+        <!-- Panel 1: AI Diagnostic Chat -->
+        <section class="panel">
+            <div class="panel-content">
+                <div class="text-content">
+                    <div class="section-label">
+                        <iconify-icon icon="lucide:sparkles" width="12"></iconify-icon>
+                        <span>Feature 01</span>
+                    </div>
+                    <h2 class="section-title">AI Diagnostic Chat</h2>
+                    <p class="section-description">
+                        Natural language processing enables students to ask medical questions and receive instant, accurate diagnostic guidance with cited medical sources.
+                    </p>
+                </div>
+                <div class="mockups-horizontal">
+                    <div class="device-frame device-primary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg" alt="AI Chat Interface" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-secondary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Chat Detail" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-tertiary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="Chat History" class="mockup-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 2: Quiz Generator -->
+        <section class="panel">
+            <div class="panel-content">
+                <div class="text-content">
+                    <div class="section-label">
+                        <iconify-icon icon="lucide:graduation-cap" width="12"></iconify-icon>
+                        <span>Feature 02</span>
+                    </div>
+                    <h2 class="section-title">Adaptive Quiz Generator</h2>
+                    <p class="section-description">
+                        AI-generated quizzes adapt to student performance and learning patterns. Questions reinforce weak areas and build comprehensive medical knowledge.
+                    </p>
+                </div>
+                <div class="mockups-horizontal">
+                    <div class="device-frame device-primary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5bab247f-35d9-400d-a82b-fd87cfe913d2_1600w.webp" alt="Quiz Interface" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-secondary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg" alt="Quiz Results" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-tertiary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Quiz Progress" class="mockup-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 3: PDF Course Correction -->
+        <section class="panel">
+            <div class="panel-content">
+                <div class="text-content">
+                    <div class="section-label">
+                        <iconify-icon icon="lucide:scan-line" width="12"></iconify-icon>
+                        <span>Feature 03</span>
+                    </div>
+                    <h2 class="section-title">PDF Course Correction</h2>
+                    <p class="section-description">
+                        Upload medical textbooks or study materials to receive AI-powered corrections and annotations. The system identifies outdated information and provides current guidelines.
+                    </p>
+                </div>
+                <div class="mockups-horizontal">
+                    <div class="device-frame device-primary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/30104e3c-5eea-4b93-93e9-5313698a7156_1600w.webp" alt="PDF Correction Interface" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-secondary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="Upload Flow" class="mockup-img">
+                    </div>
+                    <div class="device-frame device-tertiary">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5bab247f-35d9-400d-a82b-fd87cfe913d2_1600w.webp" alt="Correction Results" class="mockup-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 4: Theme System -->
+        <section class="panel">
+            <div class="panel-content">
+                <div class="text-content">
+                    <div class="section-label">
+                        <iconify-icon icon="lucide:palette" width="12"></iconify-icon>
+                        <span>Design System</span>
+                    </div>
+                    <h2 class="section-title">Light & Dark Mode</h2>
+                    <p class="section-description">
+                        A carefully designed theme system optimized for extended study sessions. Dark mode reduces eye strain, while light mode ensures clarity in clinical settings.
+                    </p>
+                </div>
+                <div class="mockups-horizontal">
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; display: flex; align-items: center; gap: 0.5rem;">
+                            <iconify-icon icon="lucide:sun" width="12"></iconify-icon>
+                            <span>Light Mode</span>
+                        </div>
+                        <div class="device-frame device-primary">
+                            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Light Mode Interface" class="mockup-img">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; display: flex; align-items: center; gap: 0.5rem;">
+                            <iconify-icon icon="lucide:moon" width="12"></iconify-icon>
+                            <span>Dark Mode</span>
+                        </div>
+                        <div class="device-frame device-primary">
+                            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="Dark Mode Interface" class="mockup-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots"></div>
+
+    <script>
+        // Navigation and scroll control
+        const scrollContainer = document.getElementById('scrollContainer');
+        const navDotsContainer = document.getElementById('navDots');
+        const panels = document.querySelectorAll('.panel');
+
+        // Create navigation dots
+        panels.forEach((panel, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('nav-dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                scrollContainer.scrollTo({
+                    left: panel.offsetLeft,
+                    behavior: 'smooth'
+                });
+            });
+            navDotsContainer.appendChild(dot);
+        });
+
+        // Update active dot on scroll
+        scrollContainer.addEventListener('scroll', () => {
+            const scrollPosition = scrollContainer.scrollLeft;
+            const containerWidth = scrollContainer.offsetWidth;
+            const activeIndex = Math.round(scrollPosition / containerWidth);
+
+            document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const scrollPosition = scrollContainer.scrollLeft;
+            const containerWidth = scrollContainer.offsetWidth;
+
+            if (e.key === 'ArrowRight') {
+                scrollContainer.scrollBy({ left: containerWidth, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                scrollContainer.scrollBy({ left: -containerWidth, behavior: 'smooth' });
+            }
+        });
+    </script>
+
+</body>
+</html>
