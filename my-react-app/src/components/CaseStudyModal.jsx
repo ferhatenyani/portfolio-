@@ -299,6 +299,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .case-study-panel:has(.desktop-layout) .case-study-mockups {
                       width: 100%;
                       justify-content: center;
+                      margin-bottom: 3rem; /* Extra spacing above pagination dots */
                     }
                   }
 
@@ -771,47 +772,118 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     }
                   }
 
-                  /* ===== PROFESSOR TOOLS - SMALL SCREENS (below 400px) ===== */
-                  @media (max-width: 400px) {
-                    /* Intro panel - smaller titles and better padding */
+                  /* ===== PROFESSOR TOOLS - SMALL SCREENS (below 450px) ===== */
+                  /* Best practices: Optimal typography scale and spacing for readability */
+                  @media (max-width: 450px) {
+                    /* Intro panel - optimized for small screens */
                     .intro-panel {
-                      padding: 2.5rem 1.25rem !important;
+                      padding: 2rem 1.5rem !important;
                       padding-bottom: 8.5rem !important;
                     }
 
                     .intro-panel h1 {
-                      font-size: 2.25rem !important; /* Reduced from text-6xl */
-                      line-height: 1.2 !important;
+                      font-size: clamp(1.75rem, 5vw, 2.5rem) !important; /* Fluid typography */
+                      line-height: 1.15 !important;
+                      margin-bottom: 1.25rem !important;
+                      letter-spacing: -0.02em !important; /* Tighter tracking for better fit */
                     }
 
                     .intro-panel p {
-                      font-size: 1rem !important; /* Reduced from text-xl */
+                      font-size: clamp(0.9rem, 3.5vw, 1.05rem) !important;
+                      line-height: 1.5 !important;
+                      max-width: 90% !important;
+                      margin: 0 auto !important;
                     }
 
-                    /* Feature panels - smaller headers and better spacing */
+                    .intro-panel .inline-flex {
+                      margin-bottom: 1rem !important;
+                      font-size: 0.7rem !important;
+                      padding: 0.5rem 0.75rem !important;
+                    }
+
+                    /* Feature panels - balanced hierarchy */
+                    .case-study-panel {
+                      padding: 2.25rem 1.5rem !important;
+                      padding-bottom: 9rem !important;
+                    }
+
+                    .case-study-panel-inner {
+                      gap: 2.5rem !important;
+                    }
+
+                    .case-study-text-content {
+                      gap: 0.75rem !important;
+                      padding: 0 0.25rem !important;
+                    }
+
+                    .case-study-text-content .pixel-text {
+                      font-size: 0.65rem !important;
+                      letter-spacing: 0.05em !important;
+                    }
+
+                    .case-study-text-content h2 {
+                      font-size: clamp(1.5rem, 4.5vw, 2rem) !important;
+                      line-height: 1.2 !important;
+                      margin-bottom: 0.75rem !important;
+                      letter-spacing: -0.01em !important;
+                    }
+
+                    .case-study-text-content p {
+                      font-size: clamp(0.875rem, 3.2vw, 1rem) !important;
+                      line-height: 1.55 !important;
+                      max-width: 100% !important;
+                    }
+
+                    /* Desktop layout - optimized spacing */
+                    .case-study-panel:has(.desktop-layout) {
+                      padding: 2.25rem 1.5rem !important;
+                      padding-bottom: 9rem !important;
+                    }
+
+                    .case-study-panel:has(.desktop-layout) .case-study-panel-inner {
+                      gap: 2.75rem !important;
+                    }
+
+                    .case-study-panel:has(.desktop-layout) h2 {
+                      font-size: clamp(1.5rem, 4.5vw, 2rem) !important;
+                      line-height: 1.2 !important;
+                    }
+
+                    /* Desktop mockups - better spacing */
+                    .desktop-layout {
+                      gap: 1.75rem !important;
+                      margin-top: 0.5rem !important;
+                    }
+
+                    .desktop-layout .mockup-primary,
+                    .desktop-layout .mockup-secondary,
+                    .desktop-layout .mockup-tertiary {
+                      width: 92% !important;
+                    }
+                  }
+
+                  /* Extra fine-tuning for very small screens (320-375px) */
+                  @media (max-width: 375px) {
+                    .intro-panel {
+                      padding: 1.75rem 1.25rem !important;
+                    }
+
+                    .intro-panel h1 {
+                      font-size: clamp(1.5rem, 4.5vw, 2rem) !important;
+                      margin-bottom: 1rem !important;
+                    }
+
                     .case-study-panel {
                       padding: 2rem 1.25rem !important;
                       padding-bottom: 8.5rem !important;
                     }
 
+                    .case-study-panel-inner {
+                      gap: 2.25rem !important;
+                    }
+
                     .case-study-text-content h2 {
-                      font-size: 1.875rem !important; /* text-3xl instead of text-4xl/5xl */
-                      line-height: 1.25 !important;
-                    }
-
-                    .case-study-text-content p {
-                      font-size: 0.95rem !important;
-                    }
-
-                    /* Desktop layout - ensure proper spacing on small screens */
-                    .case-study-panel:has(.desktop-layout) {
-                      padding: 2rem 1.25rem !important;
-                      padding-bottom: 8.5rem !important;
-                    }
-
-                    .case-study-panel:has(.desktop-layout) h2 {
-                      font-size: 1.875rem !important;
-                      line-height: 1.25 !important;
+                      font-size: clamp(1.35rem, 4vw, 1.75rem) !important;
                     }
                   }
                 `}
