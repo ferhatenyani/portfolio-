@@ -16,12 +16,14 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
 
   // Determine if we're in mobile/vertical mode based on screen size
   const [isVerticalLayout, setIsVerticalLayout] = useState(false);
+  const [showKeyboardHints, setShowKeyboardHints] = useState(false);
 
   // Track window size for responsive behavior
   useEffect(() => {
     const checkLayout = () => {
       const breakpoint = imageType === 'mobile' ? 641 : 1025;
       setIsVerticalLayout(window.innerWidth < breakpoint);
+      setShowKeyboardHints(window.innerWidth >= 1024);
     };
 
     checkLayout();
@@ -181,23 +183,25 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
               <FaTimes className="text-base md:text-xl" />
             </button>
 
-            {/* Keyboard Hints - Hidden on mobile (641px for user app, 1025px for admin app) */}
-            <motion.div
-              className={`absolute top-6 left-1/2 -translate-x-1/2 z-[10001] px-5 py-3 bg-[var(--bg-primary)]/90 border-2 border-[var(--accent-cyan)]/50 text-[var(--text-tertiary)] text-xs pixel-text pointer-events-none items-center gap-4 ${
-                isVerticalLayout ? 'hidden' : 'flex'
-              }`}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: isVerticalLayout ? 0 : 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ delay: 0.3 }}
-              style={{
-                boxShadow: '0 0 15px rgba(0, 255, 255, 0.2)'
-              }}
-            >
-              <span>Press <span className="text-[var(--accent-cyan)] mx-1">←</span> <span className="text-[var(--accent-cyan)] mx-1">→</span> to navigate</span>
-              <span className="text-[var(--text-tertiary)]/50">|</span>
-              <span>Press <span className="text-[var(--accent-pink)] mx-1">ESC</span> to close</span>
-            </motion.div>
+            {/* Keyboard Hints - Hidden below 1024px for both instances */}
+            {showKeyboardHints && (
+              <motion.div
+                className={`absolute top-6 left-1/2 -translate-x-1/2 z-[10001] px-5 py-3 bg-[var(--bg-primary)]/90 border-2 border-[var(--accent-cyan)]/50 text-[var(--text-tertiary)] text-xs pixel-text pointer-events-none items-center gap-4 ${
+                  isVerticalLayout ? 'hidden' : 'flex'
+                }`}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: isVerticalLayout ? 0 : 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: 0.3 }}
+                style={{
+                  boxShadow: '0 0 15px rgba(0, 255, 255, 0.2)'
+                }}
+              >
+                <span>Press <span className="text-[var(--accent-cyan)] mx-1">←</span> <span className="text-[var(--accent-cyan)] mx-1">→</span> to navigate</span>
+                <span className="text-[var(--text-tertiary)]/50">|</span>
+                <span>Press <span className="text-[var(--accent-pink)] mx-1\">ESC</span> to close</span>
+              </motion.div>
+            )}
 
             {/* Navigation Arrows - Hidden in vertical layout */}
             {!isVerticalLayout && currentPanel > 0 && (
@@ -300,29 +304,45 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
 
                   /* ===== RESPONSIVE BREAKPOINTS ===== */
 
-                  /* Tablets and small laptops (max-width: 1024px) */
-                  @media (max-width: 1024px) {
+                  /* Tablets and small laptops (900px to 1024px) - Use horizontal scroll with 640-900px spacing */
+                  @media (max-width: 1024px) and (min-width: 901px) {
                     .case-study-panel {
-                      padding: 2.5rem 2rem;
+                      padding: 2rem 1.5rem;
+                      padding-bottom: 5rem;
+                    }
+
+                    .case-study-panel-inner {
+                      flex-direction: column;
+                      gap: 2rem;
+                      justify-content: center;
                     }
 
                     .case-study-text-content {
-                      flex: 0 0 280px;
+                      flex: 0 0 auto;
+                      text-align: center;
+                      max-width: 500px;
+                      width: 100%;
+                    }
+
+                    .case-study-mockups {
+                      gap: 1.5rem;
+                      width: 100%;
+                      max-width: 600px;
                     }
 
                     .mockup-primary {
-                      height: 55vh !important;
-                      max-height: 500px !important;
+                      height: 45vh !important;
+                      max-height: 420px !important;
                     }
 
                     .mockup-secondary {
-                      height: 45vh !important;
-                      max-height: 400px !important;
+                      height: 38vh !important;
+                      max-height: 360px !important;
                     }
 
                     .mockup-tertiary {
-                      height: 38vh !important;
-                      max-height: 340px !important;
+                      height: 32vh !important;
+                      max-height: 300px !important;
                     }
 
                     /* Admin app vertical layout - stack images vertically */
@@ -335,8 +355,8 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
-                      width: 90% !important;
-                      max-width: 1000px !important;
+                      width: 92% !important;
+                      max-width: 800px !important;
                       height: auto !important;
                       position: relative !important;
                     }
@@ -419,112 +439,142 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                   }
 
 
-                  /* ===== DIAGONAL CASCADE LAYOUT - Mobile Portrait (Mobile Screenshots Only) ===== */
+                  /* ===== VERTICAL SCROLL MODE - Mobile Portrait ===== */
                   @media (max-width: 640px) {
+                    /* Intro panel - ensure proper centering and padding */
+                    .intro-panel {
+                      padding: 3rem 1.5rem !important;
+                      padding-bottom: 10rem !important; /* Extra padding for scroll */
+                    }
+
+                    /* Mobile layout panels */
                     .mobile-layout .case-study-panel {
-                      padding: 1.5rem 1rem;
-                      padding-bottom: 5.5rem;
+                      padding: 2rem 1rem !important;
+                      padding-bottom: 10rem !important; /* Significantly increased for full scrollability */
                       overflow-y: visible;
                     }
 
                     .mobile-layout .case-study-panel-inner {
-                      flex-direction: column;
-                      gap: 1.25rem;
-                      justify-content: flex-start;
-                      align-items: center;
-                      height: auto;
-                      min-height: calc(100vh - 6.5rem);
+                      flex-direction: column !important;
+                      gap: 3rem !important; /* Increased spacing between text and images */
+                      justify-content: flex-start !important;
+                      align-items: center !important;
+                      height: auto !important;
+                      min-height: auto !important; /* Remove min-height constraint */
                     }
 
                     .mobile-layout .case-study-text-content {
-                      flex: 0 0 auto;
-                      text-align: center;
+                      flex: 0 0 auto !important;
+                      text-align: center !important;
                       gap: 0.625rem;
                       max-width: 100%;
+                      width: 100%;
                       z-index: 10;
+                      margin-bottom: 0 !important;
                     }
 
                     .mobile-layout .case-study-mockups {
                       position: relative;
                       width: 100%;
                       height: auto;
-                      min-height: 420px;
-                      display: block;
-                      flex: 1;
-                      max-height: calc(100vh - 220px);
+                      min-height: auto !important; /* Remove fixed min-height */
+                      display: flex !important;
+                      flex-direction: column !important;
+                      gap: 1.5rem !important;
+                      align-items: center !important;
+                      max-height: none !important;
+                      margin-top: 0 !important;
                     }
 
-                    /* Diagonal cascade positioning - MOBILE SCREENSHOTS ONLY */
+                    /* Stack images vertically with proper spacing - MOBILE SCREENSHOTS */
                     .mobile-layout .mockup-primary {
-                      position: absolute !important;
-                      top: 0;
-                      right: 5%;
-                      width: 52% !important;
-                      max-width: 180px !important;
-                      height: auto !important;
-                      transform: rotate(-4deg) !important;
-                      z-index: 3;
-                      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.15), 0 8px 24px rgba(0, 255, 255, 0.12) !important;
-                    }
-
-                    /* Center single image on mobile */
-                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
                       position: relative !important;
-                      left: 50%;
-                      right: auto;
-                      transform: translateX(-50%) !important;
                       width: 60% !important;
                       max-width: 200px !important;
-                      top: auto;
+                      height: auto !important;
+                      transform: none !important;
+                      z-index: 1;
+                      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.15), 0 8px 24px rgba(0, 255, 255, 0.12) !important;
+                      top: auto !important;
+                      left: auto !important;
+                      right: auto !important;
+                      bottom: auto !important;
                     }
 
                     .mobile-layout .mockup-secondary {
-                      position: absolute !important;
-                      top: 28%;
-                      left: 8%;
-                      width: 48% !important;
-                      max-width: 165px !important;
+                      position: relative !important;
+                      width: 56% !important;
+                      max-width: 185px !important;
                       height: auto !important;
-                      transform: rotate(3deg) !important;
-                      z-index: 2;
+                      transform: none !important;
+                      z-index: 1;
                       box-shadow: 0 3px 10px rgba(255, 0, 255, 0.12), 0 6px 20px rgba(0, 255, 255, 0.1) !important;
+                      top: auto !important;
+                      left: auto !important;
+                      right: auto !important;
+                      bottom: auto !important;
                     }
 
                     .mobile-layout .mockup-tertiary {
-                      position: absolute !important;
-                      bottom: 0;
-                      right: 12%;
-                      width: 44% !important;
-                      max-width: 155px !important;
+                      position: relative !important;
+                      width: 52% !important;
+                      max-width: 170px !important;
                       height: auto !important;
-                      transform: rotate(-2deg) !important;
+                      transform: none !important;
                       z-index: 1;
                       box-shadow: 0 2px 8px rgba(255, 0, 255, 0.1), 0 4px 16px rgba(0, 255, 255, 0.09) !important;
+                      top: auto !important;
+                      left: auto !important;
+                      right: auto !important;
+                      bottom: auto !important;
                     }
 
                     /* Reset active image transforms on mobile */
                     .mobile-layout .mockup-primary.active-mobile,
                     .mobile-layout .mockup-secondary.active-mobile,
                     .mobile-layout .mockup-tertiary.active-mobile {
-                      transform: scale(1.15) !important;
+                      transform: scale(1.08) !important;
                       z-index: 10 !important;
                       box-shadow: 0 8px 24px rgba(255, 0, 255, 0.3), 0 12px 32px rgba(0, 255, 255, 0.25) !important;
                     }
 
-                    /* Desktop layout on mobile - stack vertically with no rotation */
+                    /* Desktop layout panels - proper padding and spacing */
+                    .case-study-panel:has(.desktop-layout) {
+                      padding: 2rem 1rem !important;
+                      padding-bottom: 10rem !important; /* Significantly increased for full scrollability */
+                    }
+
+                    .case-study-panel:has(.desktop-layout) .case-study-panel-inner {
+                      flex-direction: column !important;
+                      gap: 3rem !important; /* Increased spacing between text and images */
+                      align-items: center !important;
+                      min-height: auto !important;
+                    }
+
+                    .case-study-panel:has(.desktop-layout) .case-study-text-content {
+                      text-align: center !important;
+                      width: 100%;
+                      max-width: 100%;
+                      margin-bottom: 0 !important;
+                    }
+
+                    /* Desktop layout - stack vertically with no rotation */
                     .desktop-layout {
                       flex-direction: column !important;
-                      gap: 1.25rem !important;
+                      gap: 2rem !important; /* Spacing between images */
                       display: flex !important;
                       position: relative !important;
                       min-height: auto !important;
+                      margin-top: 0 !important;
+                      width: 100%;
+                      align-items: center !important;
                     }
 
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
                       position: relative !important;
-                      width: 96% !important;
+                      width: 90% !important;
                       max-width: 100% !important;
                       height: auto !important;
                       transform: none !important;
@@ -537,119 +587,183 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
 
                   /* Small mobile devices (max-width: 480px) */
                   @media (max-width: 480px) {
+                    /* Intro panel responsive adjustments */
+                    .intro-panel {
+                      padding: 2.5rem 1rem !important;
+                      padding-bottom: 9rem !important;
+                    }
+
                     .case-study-panel {
-                      padding: 1.25rem 0.875rem;
-                      padding-bottom: 5rem;
+                      padding: 1.5rem 0.875rem !important;
+                      padding-bottom: 9rem !important; /* Increased for full scrollability */
+                    }
+
+                    .mobile-layout .case-study-panel {
+                      padding: 1.75rem 0.875rem !important;
+                      padding-bottom: 9rem !important;
+                    }
+
+                    .mobile-layout .case-study-panel-inner {
+                      gap: 2.75rem !important; /* Maintain good spacing */
+                      min-height: auto !important;
+                    }
+
+                    .case-study-panel-inner {
+                      gap: 2.75rem !important; /* Spacing for desktop layout */
+                      min-height: auto !important;
+                    }
+
+                    .case-study-panel:has(.desktop-layout) {
+                      padding-bottom: 9rem !important;
                     }
 
                     .case-study-mockups {
-                      min-height: 380px;
-                      max-height: calc(100vh - 200px);
+                      min-height: auto;
+                    }
+
+                    /* Desktop layout spacing */
+                    .desktop-layout {
+                      gap: 1.75rem !important;
+                      margin-top: 1.25rem;
+                    }
+
+                    /* Mobile layout - maintain vertical stacking */
+                    .mobile-layout .case-study-mockups {
+                      gap: 1.25rem !important;
                     }
 
                     .mobile-layout .mockup-primary {
-                      max-width: 160px !important;
-                      right: 3%;
-                    }
-
-                    /* Center single image on mobile */
-                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
-                      max-width: 190px !important;
+                      max-width: 185px !important;
+                      width: 58% !important;
                     }
 
                     .mobile-layout .mockup-secondary {
-                      max-width: 145px !important;
-                      left: 5%;
-                      top: 30%;
+                      max-width: 170px !important;
+                      width: 54% !important;
                     }
 
                     .mobile-layout .mockup-tertiary {
-                      max-width: 135px !important;
-                      right: 8%;
+                      max-width: 155px !important;
+                      width: 50% !important;
                     }
                   }
 
                   /* Very small screens (max-width: 375px) */
                   @media (max-width: 375px) {
+                    /* Intro panel responsive adjustments */
+                    .intro-panel {
+                      padding: 2rem 0.875rem !important;
+                      padding-bottom: 8.5rem !important;
+                    }
+
                     .case-study-panel {
-                      padding: 1rem 0.75rem;
-                      padding-bottom: 4.75rem;
+                      padding: 1.5rem 0.75rem !important;
+                      padding-bottom: 8.5rem !important; /* Increased for full scrollability */
+                    }
+
+                    .mobile-layout .case-study-panel {
+                      padding: 1.5rem 0.75rem !important;
+                      padding-bottom: 8.5rem !important;
                     }
 
                     .case-study-panel-inner {
-                      gap: 1rem;
-                      min-height: calc(100vh - 5.75rem);
+                      gap: 2.5rem !important; /* Increased spacing */
+                      min-height: auto !important;
+                    }
+
+                    .mobile-layout .case-study-panel-inner {
+                      gap: 2.5rem !important; /* Maintain good spacing for mobile layout */
+                    }
+
+                    .case-study-panel:has(.desktop-layout) {
+                      padding-bottom: 8.5rem !important;
                     }
 
                     .case-study-mockups {
-                      min-height: 350px;
-                      max-height: calc(100vh - 180px);
+                      min-height: auto;
+                    }
+
+                    /* Mobile layout - maintain vertical stacking */
+                    .mobile-layout .case-study-mockups {
+                      gap: 1.25rem !important;
                     }
 
                     .mobile-layout .mockup-primary {
-                      max-width: 145px !important;
-                      width: 50% !important;
-                    }
-
-                    /* Center single image on mobile */
-                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
                       max-width: 175px !important;
                       width: 58% !important;
                     }
 
                     .mobile-layout .mockup-secondary {
-                      max-width: 130px !important;
-                      width: 46% !important;
+                      max-width: 160px !important;
+                      width: 54% !important;
                     }
 
                     .mobile-layout .mockup-tertiary {
-                      max-width: 120px !important;
-                      width: 42% !important;
+                      max-width: 145px !important;
+                      width: 50% !important;
                     }
                   }
 
                   /* Extra small screens (320px) - Production ready! */
                   @media (max-width: 320px) {
+                    /* Intro panel responsive adjustments */
+                    .intro-panel {
+                      padding: 1.75rem 0.75rem !important;
+                      padding-bottom: 8rem !important;
+                    }
+
                     .case-study-panel {
-                      padding: 0.875rem 0.625rem;
-                      padding-bottom: 4.5rem;
+                      padding: 1.25rem 0.625rem !important;
+                      padding-bottom: 8rem !important; /* Increased for full scrollability */
+                    }
+
+                    .mobile-layout .case-study-panel {
+                      padding: 1.25rem 0.625rem !important;
+                      padding-bottom: 8rem !important;
                     }
 
                     .case-study-panel-inner {
-                      min-height: calc(100vh - 5.375rem);
+                      gap: 2.25rem !important; /* Maintain spacing */
+                      min-height: auto !important;
+                    }
+
+                    .mobile-layout .case-study-panel-inner {
+                      gap: 2.25rem !important; /* Maintain good spacing for mobile layout */
+                    }
+
+                    .case-study-panel:has(.desktop-layout) {
+                      padding-bottom: 8rem !important;
                     }
 
                     .case-study-mockups {
-                      min-height: 320px;
-                      max-height: calc(100vh - 160px);
+                      min-height: auto;
+                    }
+
+                    /* Mobile layout - maintain vertical stacking */
+                    .mobile-layout .case-study-mockups {
+                      gap: 1rem !important;
                     }
 
                     .mobile-layout .mockup-primary {
-                      max-width: 130px !important;
-                      right: 2%;
-                    }
-
-                    /* Center single image on mobile */
-                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
                       max-width: 160px !important;
                       width: 56% !important;
                     }
 
                     .mobile-layout .mockup-secondary {
-                      max-width: 115px !important;
-                      left: 3%;
+                      max-width: 145px !important;
+                      width: 52% !important;
                     }
 
                     .mobile-layout .mockup-tertiary {
-                      max-width: 105px !important;
-                      right: 5%;
+                      max-width: 130px !important;
+                      width: 48% !important;
                     }
                   }
                 `}
               </style>
 
               {/* Intro Panel */}
-              <div className={`${isVerticalLayout ? 'min-h-full' : 'min-w-full'} w-full h-full snap-start flex flex-col items-center justify-center px-6 py-12 bg-[var(--bg-secondary)]`}>
+              <div className={`intro-panel ${isVerticalLayout ? 'min-h-full' : 'min-w-full'} w-full h-full snap-start flex flex-col items-center justify-center px-6 py-12 bg-[var(--bg-secondary)]`}>
                 <motion.div
                   className="max-w-3xl text-center"
                   initial={{ opacity: 0, y: 30 }}
