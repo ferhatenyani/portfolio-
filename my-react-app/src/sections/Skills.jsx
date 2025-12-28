@@ -11,14 +11,19 @@ import PixelThemeBlock from '../components/PixelThemeBlock';
 export default function Skills() {
   const skillCategories = [
     {
+  name: 'Specialization',
+  color: 'pink', // or a new accent like purple
+  skills: ['Framer Motion Mastery', 'Performance & Optimization', 'Responsive & Mobile-First Design','Micro-Interactions', 'Scroll-Driven Animations', 'Component-Driven Development']
+},
+    {
       name: 'Frontend Development',
       color: 'cyan',
-      skills: ['React', 'React Native', 'TypeScript', 'JavaScript', 'Tailwind CSS']
+      skills: ['React', 'TypeScript', 'TanStack Query', 'Zustand', 'Tailwind CSS', 'JavaScript', 'React Native']
     },
     {
       name: 'Animation & Motion',
       color: 'pink',
-      skills: ['Framer Motion', 'CSS Animations', 'GSAP', 'Animation Libraries']
+      skills: ['Framer Motion', 'CSS Animations', 'GSAP ScrollTrigger', 'Three.js']
     },
     {
       name: 'Design Tools',
@@ -28,7 +33,7 @@ export default function Skills() {
     {
       name: 'Development Tools',
       color: 'cyan',
-      skills: ['Git', 'GitHub', 'Linux', 'Jira', 'VS Code']
+      skills: ['Git & GitHub','Vercel & Netlify Deployments', 'Linux', 'Jira', 'Chrome DevTools', 'Docker']
     }
   ];
 

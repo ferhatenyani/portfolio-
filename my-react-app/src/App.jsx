@@ -3,9 +3,10 @@ import PixelCursor from './components/PixelCursor';
 import ThemeToggle from './components/ThemeToggle';
 import Hero from './sections/Hero';
 import About from './sections/About';
-import Projects from './sections/Projects';
 import Skills from './sections/Skills';
+import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+
 
 /**
  * Main App Component - Hybrid Pixel + Modern Portfolio
@@ -33,8 +34,8 @@ function App() {
       <main>
         <Hero />
         <About />
-        <Projects />
         <Skills />
+        <Projects />
         <Contact />
       </main>
     </div>

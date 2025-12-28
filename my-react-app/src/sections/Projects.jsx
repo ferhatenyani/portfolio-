@@ -5,7 +5,7 @@ import PixelDegrade from '../components/PixelDegrade';
 import PixelText from '../components/PixelText';
 import AnimatedText from '../components/AnimatedText';
 import PixelThemeBlock from '../components/PixelThemeBlock';
-import Modal from '../components/Modal';
+import ProjectModal from '../components/ProjectModal';
 import CaseStudyModal from '../components/CaseStudyModal';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
@@ -14,19 +14,22 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
  * Each project has User App + Admin App cards that open modals
  */
 export default function Projects() {
-  const [modalContent, setModalContent] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // State for ProjectModal (PowerBI and Bookstore)
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [currentProject, setCurrentProject] = useState(null);
+
+  // State for CaseStudyModal (Medical AI)
   const [caseStudyModalOpen, setCaseStudyModalOpen] = useState(false);
   const [currentCaseStudy, setCurrentCaseStudy] = useState(null);
 
-  const openModal = (content) => {
-    setModalContent(content);
-    setIsModalOpen(true);
+  const openProjectModal = (projectData) => {
+    setCurrentProject(projectData);
+    setProjectModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => setModalContent(null), 200);
+  const closeProjectModal = () => {
+    setProjectModalOpen(false);
+    setTimeout(() => setCurrentProject(null), 200);
   };
 
   const openCaseStudyModal = (caseStudy) => {
@@ -41,7 +44,7 @@ export default function Projects() {
 
   // Case Study Data - Medical AI Chatbot (Student Interface)
   const medicalAICaseStudy = {
-    title: 'MediMind AI',
+    title: 'ReviseGPT',
     description: 'An AI-powered medical education platform designed to support students through intelligent diagnostics, adaptive learning, and course correction.',
     imageType: 'mobile',
     panels: [
@@ -99,7 +102,7 @@ export default function Projects() {
       {
         label: 'Feature 04',
         title: 'Profile & Access',
-        description: 'Personalized student profiles track learning progress, manage subscriptions, and provide access to premium features tailored to medical education needs.',
+        description: 'Personalized student profiles • Subscription management • Premium features tailored for medical education',
         mockups: [
           {
             src: '/medicalChatBot/app-user/profilePage1.png',
@@ -140,7 +143,7 @@ export default function Projects() {
 
   // Case Study Data - Medical AI Chatbot (Professor/Admin Interface)
   const medicalAIProfessorCaseStudy = {
-    title: 'Professor Tools',
+    title: 'Admin application',
     description: 'Comprehensive admin platform for managing medical education content, monitoring student progress, and overseeing course corrections.',
     imageType: 'desktop',
     panels: [
@@ -267,12 +270,12 @@ export default function Projects() {
   const projects = [
     {
       id: 1,
-      title: 'SaaS Analytics Platform',
+      title: 'Embedded Analytics Dashboard with Power BI',
       description: 'A modern SaaS application featuring embedded Power BI dashboards, designed with a clear separation between User and Admin experiences. The focus is on data clarity, role-based access, and smooth interactions, delivering complex analytics through a clean, intuitive interface.',
-      tags: ['React', 'Tailwind CSS', 'Framer Motion'],
+      tags: ['React', 'Tailwind CSS','TypeScript', 'Framer Motion'],
       userApp: {
-        name: 'User App',
-        description: 'Clean analytics dashboard for end users',
+        name: 'User Dashboard',
+        description: 'Interactive, data-rich interface with seamless Power BI integration and smooth performance.',
         emoji: '👤',
         accentColor: 'cyan',
         modalContent: {
@@ -287,8 +290,8 @@ export default function Projects() {
         }
       },
       adminApp: {
-        name: 'Admin App',
-        description: 'Advanced control panel with Power BI integration',
+        name: 'Admin panel',
+        description: 'Advanced management tools for dashboard configuration, user oversight, and system analytics.',
         emoji: '⚙️',
         accentColor: 'pink',
         modalContent: {
@@ -306,12 +309,49 @@ export default function Projects() {
     },
     {
       id: 2,
-      title: 'Book E-commerce Platform',
-      description: 'A full-featured book e-commerce platform with a dedicated User app for browsing and purchasing, and a powerful Admin app giving the store owner complete control over products, orders, and content. The project emphasizes usability, motion-driven feedback, and scalable UI architecture.',
-      tags: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      title: 'ReviseGPT – AI-Powered Medical Learning Platform',
+      description: 'An intelligent platform empowering medical students and professors with AI-driven diagnostics, adaptive quizzes, and automated course corrections — paired with a powerful admin dashboard for content oversight.',
+      tags: ['Figma', 'UI/UX Design'],
       userApp: {
-        name: 'User App',
-        description: 'Seamless book browsing and purchasing experience',
+        name: 'Student/professor Interface',
+        description: 'AI chatbot, adaptive learning tools, and personalized study features tailored for medical students and professors.',
+        emoji: '🎓',
+        accentColor: 'cyan',
+        modalContent: {
+          title: 'Medical AI Assistant - User Interface',
+          subtitle: 'AI-powered learning assistant',
+          description: 'ChatGPT-inspired interface for medical students featuring an AI chatbot for answering medical questions and a quiz generator for practice. Designed with focus on clarity, accessibility, and ease of use in a learning context.',
+          media: '/path/to/medical-student-mockup.jpg', // Replace with actual path
+          mediaType: 'image',
+          stack: ['Figma'],
+          demoLink: null // Figma mockups - no live demo
+        }
+      },
+      adminApp: {
+        name: 'Admin dashboard',
+        description: 'Full platform control: user management, quiz analytics, payment oversight, and AI correction review.',
+        emoji: '👨‍🏫',
+        accentColor: 'pink',
+        modalContent: {
+          title: 'Medical AI Assistant - admin interface',
+          subtitle: 'Course management and correction tools',
+          description: 'Educator-focused interface providing course correction tools, content management, and oversight of student progress. Designed to streamline the teaching workflow while maintaining high educational standards.',
+          media: '/path/to/medical-professor-mockup.jpg', // Replace with actual path
+          mediaType: 'image',
+          stack: ['Figma'],
+          demoLink: null // Figma mockups - no live demo
+        }
+      },
+      color: 'amber'
+    },
+    {
+      id: 3,
+      title: 'Full-Stack Bookstore with Admin CMS',
+      description: 'A full-featured book e-commerce platform with a dedicated User app for browsing and purchasing, and a powerful Admin app giving the store owner complete control over products, orders, and content. The project emphasizes usability, motion-driven feedback, and scalable UI architecture.',
+      tags: ['React', 'Tailwind CSS','TanStack Query', 'Framer Motion', 'Spring Boot'],
+      userApp: {
+        name: 'Customer Storefront',
+        description: 'Smooth browsing, advanced filtering, animated interactions, and intuitive checkout flow.',
         emoji: '📚',
         accentColor: 'cyan',
         modalContent: {
@@ -325,8 +365,8 @@ export default function Projects() {
         }
       },
       adminApp: {
-        name: 'Admin App',
-        description: 'Complete control over products, orders, and content',
+        name: 'Store Owner Dashboard',
+        description: 'Complete control over products, inventory, orders, and content — designed for efficiency.',
         emoji: '🛠️',
         accentColor: 'pink',
         modalContent: {
@@ -341,43 +381,7 @@ export default function Projects() {
       },
       color: 'pink'
     },
-    {
-      id: 3,
-      title: 'Medical AI Assistant (UI/UX Concept)',
-      description: 'A ChatGPT-inspired interface designed specifically for medical students and educators. The product is structured around three core experiences: An AI chatbot for medical questions, a course correction tool for professors, and a quiz generator to support student learning. The project focuses on information hierarchy, workflow clarity, and accessibility in a high-density educational context.',
-      tags: ['Figma', 'UI/UX Design'],
-      userApp: {
-        name: 'Student Interface',
-        description: 'AI chatbot and quiz tools for medical students',
-        emoji: '🎓',
-        accentColor: 'cyan',
-        modalContent: {
-          title: 'Medical AI Assistant - Student Interface',
-          subtitle: 'AI-powered learning assistant',
-          description: 'ChatGPT-inspired interface for medical students featuring an AI chatbot for answering medical questions and a quiz generator for practice. Designed with focus on clarity, accessibility, and ease of use in a learning context.',
-          media: '/path/to/medical-student-mockup.jpg', // Replace with actual path
-          mediaType: 'image',
-          stack: ['Figma'],
-          demoLink: null // Figma mockups - no live demo
-        }
-      },
-      adminApp: {
-        name: 'Professor Tools',
-        description: 'Course correction and content management for educators',
-        emoji: '👨‍🏫',
-        accentColor: 'pink',
-        modalContent: {
-          title: 'Medical AI Assistant - Professor Tools',
-          subtitle: 'Course management and correction tools',
-          description: 'Educator-focused interface providing course correction tools, content management, and oversight of student progress. Designed to streamline the teaching workflow while maintaining high educational standards.',
-          media: '/path/to/medical-professor-mockup.jpg', // Replace with actual path
-          mediaType: 'image',
-          stack: ['Figma'],
-          demoLink: null // Figma mockups - no live demo
-        }
-      },
-      color: 'amber'
-    }
+    
   ];
 
   return (
@@ -464,11 +468,16 @@ export default function Projects() {
                         transform: 'translateZ(0)'
                       }}
                       onClick={() => {
-                        // Use new CaseStudyModal for Medical AI Assistant (id: 3)
-                        if (project.id === 3) {
+                        // Use CaseStudyModal for Medical AI Assistant (id: 2)
+                        if (project.id === 2) {
                           openCaseStudyModal(medicalAICaseStudy);
                         } else {
-                          openModal(project.userApp.modalContent);
+                          // Use ProjectModal for PowerBI (id: 1) and Bookstore (id: 3)
+                          openProjectModal({
+                            ...project.userApp.modalContent,
+                            type: 'User App',
+                            stack: project.tags // Use project's main tags
+                          });
                         }
                       }}
                     >
@@ -522,11 +531,16 @@ export default function Projects() {
                         transform: 'translateZ(0)'
                       }}
                       onClick={() => {
-                        // Use new CaseStudyModal for Medical AI Assistant Admin (id: 3)
-                        if (project.id === 3) {
+                        // Use CaseStudyModal for Medical AI Assistant Admin (id: 2)
+                        if (project.id === 2) {
                           openCaseStudyModal(medicalAIProfessorCaseStudy);
                         } else {
-                          openModal(project.adminApp.modalContent);
+                          // Use ProjectModal for PowerBI (id: 1) and Bookstore (id: 3)
+                          openProjectModal({
+                            ...project.adminApp.modalContent,
+                            type: 'Admin App',
+                            stack: project.tags // Use project's main tags
+                          });
                         }
                       }}
                     >
@@ -572,10 +586,14 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
+      {/* Project Modal - For PowerBI and Bookstore */}
+      <ProjectModal
+        isOpen={projectModalOpen}
+        onClose={closeProjectModal}
+        project={currentProject}
+      />
 
-      {/* Case Study Modal */}
+      {/* Case Study Modal - For Medical AI */}
       <CaseStudyModal
         isOpen={caseStudyModalOpen}
         onClose={closeCaseStudyModal}
