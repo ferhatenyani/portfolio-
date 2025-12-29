@@ -73,22 +73,25 @@ export default function Hero() {
         {/* MOBILE & TABLET: Vertical Neon Cityscape Layout (320px - 1023px) */}
         <div className="lg:hidden w-full max-w-2xl flex items-center gap-6 sm:gap-8 min-h-[80vh]">
 
-          {/* LEFT: Vertical Neon Sign Name */}
-          <div className="flex-shrink-0 relative">
+          {/* LEFT: Dual Vertical Neon Signs - FERHATEN & YANI */}
+          <div className="flex-shrink-0 relative flex items-center gap-3 sm:gap-4">
+
+            {/* FERHATEN - Primary Neon Sign */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: baseDelay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="relative"
             >
-              {/* Vertical Name with Neon Glow */}
+              {/* Vertical Name with Cyan Neon Glow - Auto-scaled */}
               <h1
-                className="writing-mode-vertical text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight"
+                className="writing-mode-vertical font-bold tracking-tight"
                 style={{
                   fontFamily: 'var(--font-pixel)',
                   writingMode: 'vertical-rl',
                   textOrientation: 'upright',
                   letterSpacing: '0.1em',
+                  fontSize: 'clamp(2.5rem, 8vh, 6rem)',
                   textShadow: `
                     0 0 10px var(--accent-cyan),
                     0 0 20px var(--accent-cyan),
@@ -102,7 +105,7 @@ export default function Hero() {
                 </AnimatedText>
               </h1>
 
-              {/* Neon tube border effect */}
+              {/* Cyan Neon tube border effect */}
               <motion.div
                 className="absolute -left-2 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[var(--accent-cyan)] to-transparent"
                 initial={{ opacity: 0, scaleY: 0 }}
@@ -120,6 +123,55 @@ export default function Hero() {
                 }}
               />
             </motion.div>
+
+            {/* YANI - Secondary Neon Sign (Smaller, Pink Glow) */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: baseDelay + 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="relative"
+            >
+              {/* Vertical Last Name with Pink/Magenta Neon Glow - Smaller & Auto-scaled */}
+              <h1
+                className="writing-mode-vertical font-bold tracking-tight opacity-90"
+                style={{
+                  fontFamily: 'var(--font-pixel)',
+                  writingMode: 'vertical-rl',
+                  textOrientation: 'upright',
+                  letterSpacing: '0.1em',
+                  fontSize: 'clamp(1.75rem, 5.5vh, 4rem)',
+                  textShadow: `
+                    0 0 8px var(--accent-pink),
+                    0 0 16px var(--accent-pink),
+                    0 0 24px var(--accent-pink),
+                    0 0 32px rgba(255, 0, 153, 0.4)
+                  `
+                }}
+              >
+                <AnimatedText delay={baseDelay + 0.1} stagger={0.04} scrollTrigger={false} glitchIntensity="medium" variant="full">
+                  YANI
+                </AnimatedText>
+              </h1>
+
+              {/* Pink Neon tube border effect */}
+              <motion.div
+                className="absolute -left-1.5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[var(--accent-pink)] to-transparent"
+                initial={{ opacity: 0, scaleY: 0 }}
+                animate={{
+                  opacity: [0.25, 0.7, 0.25],
+                  scaleY: 1
+                }}
+                transition={{
+                  scaleY: { delay: baseDelay + 0.3, duration: 0.8 },
+                  opacity: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }
+                }}
+                style={{
+                  originY: 0,
+                  boxShadow: '0 0 8px var(--accent-pink), 0 0 16px var(--accent-pink)'
+                }}
+              />
+            </motion.div>
+
           </div>
 
           {/* RIGHT: Content Stack */}
