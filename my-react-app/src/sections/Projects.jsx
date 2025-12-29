@@ -385,7 +385,7 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="relative py-32 px-6 overflow-hidden bg-[var(--bg-secondary)]">
+    <section id="projects" className="relative py-16 sm:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden bg-[var(--bg-secondary)]">
       {/* Background Gradient Orbs */}
       <div className="absolute top-1/4 -right-64 w-128 h-128 bg-[var(--accent-cyan)] rounded-full opacity-5 blur-3xl" />
       <div className="absolute bottom-1/4 -left-64 w-128 h-128 bg-[var(--accent-pink)] rounded-full opacity-5 blur-3xl" />
@@ -393,193 +393,200 @@ export default function Projects() {
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <PixelDegrade delay={0.2}>
-          <motion.div className="mb-20 text-center">
-            <span className="pixel-text text-sm text-[var(--accent-pink)] mb-2 block">
+          <motion.div className="mb-12 sm:mb-16 lg:mb-20 text-center">
+            <span className="pixel-text text-xs sm:text-sm text-[var(--accent-pink)] mb-2 block">
               <PixelText delay={0.1} stagger={0.02}>
                 // Selected Work
               </PixelText>
             </span>
             <h2
-              className="text-5xl md:text-6xl font-bold gradient-text mb-4"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold gradient-text mb-3 sm:mb-4"
               style={{ fontFamily: 'var(--font-pixel)' }}
             >
               <AnimatedText delay={0.3} stagger={0.028} glitchIntensity="high" variant="full">
                 FEATURED PROJECTS
               </AnimatedText>
             </h2>
-            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto px-4">
               Full-stack applications and design systems crafted with precision—each featuring distinct user and administrative interfaces.
             </p>
           </motion.div>
         </PixelDegrade>
 
-        {/* Projects Grid */}
-        <div className="space-y-24">
+        {/* Projects Grid - Mobile First */}
+        <div className="space-y-12 sm:space-y-16 lg:space-y-24">
           {projects.map((project, idx) => (
             <PixelDegrade key={project.id} delay={0.3 + idx * 0.2}>
-              <div className="grid lg:grid-cols-2 gap-8">
-                {/* Project Header */}
-                <div className="lg:col-span-2">
-                  <motion.div
-                    className="border-l-4 pl-6 mb-8"
-                    style={{
-                      borderColor:
-                        project.color === 'cyan'
+              {/* Project Container */}
+              <div className="space-y-5 sm:space-y-6">
+                {/* Project Header - Compact & Minimal */}
+                <motion.div
+                  className="relative"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + idx * 0.1 }}
+                >
+                  {/* Project Number Badge - Smaller */}
+                  <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center border pixel-text text-xs sm:text-sm"
+                      style={{
+                        borderColor: project.color === 'cyan'
+                          ? 'var(--accent-cyan)'
+                          : project.color === 'pink'
+                          ? 'var(--accent-pink)'
+                          : 'var(--accent-amber)',
+                        color: project.color === 'cyan'
                           ? 'var(--accent-cyan)'
                           : project.color === 'pink'
                           ? 'var(--accent-pink)'
                           : 'var(--accent-amber)'
-                    }}
-                  >
-                    <h3
-                      className="text-4xl font-bold text-[var(--text-primary)] mb-3"
-                      style={{ fontFamily: 'var(--font-pixel)' }}
+                      }}
                     >
-                      <AnimatedText delay={0.5 + idx * 0.2} stagger={0.035} glitchIntensity="medium" variant="simple">
-                        {project.title.toUpperCase()}
-                      </AnimatedText>
-                    </h3>
-                    <p className="text-lg text-[var(--text-secondary)] mb-4 leading-relaxed">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 bg-[var(--bg-tertiary)] text-[var(--text-secondary)] text-sm pixel-text border border-[var(--accent-cyan)] border-opacity-20"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      0{project.id}
                     </div>
-                  </motion.div>
-                </div>
+                    <div className="h-[1px] flex-1 bg-gradient-to-r from-[var(--accent-cyan)] to-transparent opacity-20" />
+                  </div>
 
-                {/* User App Card */}
-                <PixelGlitch>
-                  <PixelThemeBlock delay={0.15 + idx * 0.1}>
-                    <motion.div
-                      className="group relative bg-[var(--bg-tertiary)] p-8 border-2 border-transparent hover:border-[var(--accent-cyan)] transition-all duration-300 cursor-pointer"
-                      whileHover={{ y: -8 }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        perspective: 1000,
-                        transform: 'translateZ(0)'
-                      }}
-                      onClick={() => {
-                        // Use CaseStudyModal for Medical AI Assistant (id: 2)
-                        if (project.id === 2) {
-                          openCaseStudyModal(medicalAICaseStudy);
-                        } else {
-                          // Use ProjectModal for PowerBI (id: 1) and Bookstore (id: 3)
-                          openProjectModal({
-                            ...project.userApp.modalContent,
-                            type: 'User App',
-                            stack: project.tags // Use project's main tags
-                          });
-                        }
-                      }}
-                    >
-                      {/* Card Content */}
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-4">
-                          <h4 className="text-2xl font-bold text-[var(--text-primary)] glitch-text">
+                  {/* Title - Smaller */}
+                  <h3
+                    className="text-lg sm:text-xl lg:text-2xl font-bold text-[var(--text-primary)] mb-2 leading-tight"
+                    style={{ fontFamily: 'var(--font-pixel)' }}
+                  >
+                    <AnimatedText delay={0.5 + idx * 0.2} stagger={0.035} glitchIntensity="medium" variant="simple">
+                      {project.title.toUpperCase()}
+                    </AnimatedText>
+                  </h3>
+
+                  {/* Description - Smaller, more compact */}
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-2 sm:mb-3 leading-relaxed max-w-3xl opacity-80">
+                    {project.description}
+                  </p>
+
+                  {/* Tags - Smaller */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[var(--bg-tertiary)] text-[var(--text-secondary)] text-[10px] sm:text-xs pixel-text border border-[var(--accent-cyan)] border-opacity-20 hover:border-opacity-40 transition-all"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* App Cards Grid - Equal Height, Responsive, Minimal */}
+                <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:gap-8">
+                  {/* User App Card */}
+                  <PixelGlitch>
+                    <PixelThemeBlock delay={0.15 + idx * 0.1}>
+                      <motion.div
+                        className="group relative bg-[var(--bg-tertiary)] border-2 border-[var(--accent-cyan)] border-opacity-20 hover:border-opacity-100 transition-all duration-300 cursor-pointer flex items-center justify-center h-[180px] sm:h-[220px] lg:h-[260px]"
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                          backfaceVisibility: 'hidden',
+                          perspective: 1000,
+                          transform: 'translateZ(0)'
+                        }}
+                        onClick={() => {
+                          if (project.id === 2) {
+                            openCaseStudyModal(medicalAICaseStudy);
+                          } else {
+                            openProjectModal({
+                              ...project.userApp.modalContent,
+                              type: 'User App',
+                              stack: project.tags
+                            });
+                          }
+                        }}
+                      >
+                        {/* Card Content - Centered Container */}
+                        <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+                          {/* Title */}
+                          <h4 className="text-sm sm:text-base lg:text-lg font-bold text-[var(--text-primary)] mb-3 sm:mb-4 lg:mb-5 glitch-text leading-tight">
                             {project.userApp.name}
                           </h4>
-                          <div className="w-12 h-12 flex items-center justify-center bg-[var(--accent-cyan)] bg-opacity-10 group-hover:bg-opacity-20 transition-all">
-                            <span className="text-2xl">{project.userApp.emoji}</span>
+
+                          {/* CTA Button */}
+                          <div className="px-3 py-1.5 sm:px-4 sm:py-2 border border-[var(--accent-cyan)] border-opacity-40 group-hover:border-opacity-100 transition-all flex items-center justify-center gap-1.5">
+                            <span className="pixel-text text-[10px] sm:text-xs text-[var(--accent-cyan)] tracking-wider">VIEW DETAILS</span>
+                            <FaExternalLinkAlt className="text-[8px] sm:text-[10px] text-[var(--accent-cyan)]" />
                           </div>
                         </div>
 
-                        <p className="text-[var(--text-secondary)] mb-6">
-                          {project.userApp.description}
-                        </p>
+                        {/* Hover Glow Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-cyan)] to-transparent opacity-0 group-hover:opacity-5 transition-opacity" />
 
-                        {/* Click to view prompt */}
-                        <div className="flex items-center gap-2 text-[var(--accent-cyan)] pixel-text text-sm">
-                          <FaExternalLinkAlt />
-                          Click to view details
-                        </div>
-                      </div>
+                        {/* Pixel Corner Accent */}
+                        <motion.div
+                          className="absolute -top-2 -right-2 sm:-top-2.5 sm:-right-2.5 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 bg-[var(--accent-cyan)]"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.5 + idx * 0.2 }}
+                        />
+                      </motion.div>
+                    </PixelThemeBlock>
+                  </PixelGlitch>
 
-                      {/* Hover Glow Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-cyan)] to-transparent opacity-0 group-hover:opacity-5 transition-opacity" />
-
-                      {/* Pixel Corner Accent */}
+                  {/* Admin App Card */}
+                  <PixelGlitch>
+                    <PixelThemeBlock delay={0.25 + idx * 0.1}>
                       <motion.div
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-[var(--accent-cyan)]"
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.5 + idx * 0.2 }}
-                      />
-                    </motion.div>
-                  </PixelThemeBlock>
-                </PixelGlitch>
-
-                {/* Admin App Card */}
-                <PixelGlitch>
-                  <PixelThemeBlock delay={0.25 + idx * 0.1}>
-                    <motion.div
-                      className="group relative bg-[var(--bg-tertiary)] p-8 border-2 border-transparent hover:border-[var(--accent-pink)] transition-all duration-300 cursor-pointer"
-                      whileHover={{ y: -8 }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        perspective: 1000,
-                        transform: 'translateZ(0)'
-                      }}
-                      onClick={() => {
-                        // Use CaseStudyModal for Medical AI Assistant Admin (id: 2)
-                        if (project.id === 2) {
-                          openCaseStudyModal(medicalAIProfessorCaseStudy);
-                        } else {
-                          // Use ProjectModal for PowerBI (id: 1) and Bookstore (id: 3)
-                          openProjectModal({
-                            ...project.adminApp.modalContent,
-                            type: 'Admin App',
-                            stack: project.tags // Use project's main tags
-                          });
-                        }
-                      }}
-                    >
-                      {/* Card Content */}
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-4">
-                          <h4 className="text-2xl font-bold text-[var(--text-primary)] glitch-text">
+                        className="group relative bg-[var(--bg-tertiary)] border-2 border-[var(--accent-pink)] border-opacity-20 hover:border-opacity-100 transition-all duration-300 cursor-pointer flex items-center justify-center h-[180px] sm:h-[220px] lg:h-[260px]"
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                          backfaceVisibility: 'hidden',
+                          perspective: 1000,
+                          transform: 'translateZ(0)'
+                        }}
+                        onClick={() => {
+                          if (project.id === 2) {
+                            openCaseStudyModal(medicalAIProfessorCaseStudy);
+                          } else {
+                            openProjectModal({
+                              ...project.adminApp.modalContent,
+                              type: 'Admin App',
+                              stack: project.tags
+                            });
+                          }
+                        }}
+                      >
+                        {/* Card Content - Centered Container */}
+                        <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+                          {/* Title */}
+                          <h4 className="text-sm sm:text-base lg:text-lg font-bold text-[var(--text-primary)] mb-3 sm:mb-4 lg:mb-5 glitch-text leading-tight">
                             {project.adminApp.name}
                           </h4>
-                          <div className="w-12 h-12 flex items-center justify-center bg-[var(--accent-pink)] bg-opacity-10 group-hover:bg-opacity-20 transition-all">
-                            <span className="text-2xl">{project.adminApp.emoji}</span>
+
+                          {/* CTA Button */}
+                          <div className="px-3 py-1.5 sm:px-4 sm:py-2 border border-[var(--accent-pink)] border-opacity-40 group-hover:border-opacity-100 transition-all flex items-center justify-center gap-1.5">
+                            <span className="pixel-text text-[10px] sm:text-xs text-[var(--accent-pink)] tracking-wider">VIEW DETAILS</span>
+                            <FaExternalLinkAlt className="text-[8px] sm:text-[10px] text-[var(--accent-pink)]" />
                           </div>
                         </div>
 
-                        <p className="text-[var(--text-secondary)] mb-6">
-                          {project.adminApp.description}
-                        </p>
+                        {/* Hover Glow Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-pink)] to-transparent opacity-0 group-hover:opacity-5 transition-opacity" />
 
-                        {/* Click to view prompt */}
-                        <div className="flex items-center gap-2 text-[var(--accent-pink)] pixel-text text-sm">
-                          <FaExternalLinkAlt />
-                          Click to view details
-                        </div>
-                      </div>
-
-                      {/* Hover Glow Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-pink)] to-transparent opacity-0 group-hover:opacity-5 transition-opacity" />
-
-                      {/* Pixel Corner Accent */}
-                      <motion.div
-                        className="absolute -bottom-2 -left-2 w-6 h-6 bg-[var(--accent-pink)]"
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.6 + idx * 0.2 }}
-                      />
-                    </motion.div>
-                  </PixelThemeBlock>
-                </PixelGlitch>
+                        {/* Pixel Corner Accent */}
+                        <motion.div
+                          className="absolute -bottom-2 -left-2 sm:-bottom-2.5 sm:-left-2.5 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 bg-[var(--accent-pink)]"
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.6 + idx * 0.2 }}
+                        />
+                      </motion.div>
+                    </PixelThemeBlock>
+                  </PixelGlitch>
+                </div>
               </div>
             </PixelDegrade>
           ))}
