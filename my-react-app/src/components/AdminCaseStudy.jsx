@@ -3,13 +3,11 @@ import { useEffect, useState, useRef } from 'react';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 /**
- * CaseStudyModal - Responsive case study modal with adaptive layout
- * Supports both horizontal (desktop) and vertical (mobile) scrolling
- * @param {string} imageType - 'mobile' for portrait app screenshots, 'desktop' for landscape screenshots
- *   - 'mobile': switches to vertical scroll at <641px
- *   - 'desktop': switches to vertical scroll at <1025px
+ * AdminCaseStudy - Desktop-optimized case study modal for admin/dashboard interfaces
+ * Designed for landscape screenshots with vertical scrolling on tablets/mobile
+ * Switches to vertical scroll at <1025px for optimal tablet/mobile viewing
  */
-export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType = 'mobile' }) {
+export default function AdminCaseStudy({ isOpen, onClose, caseStudy }) {
   const [currentPanel, setCurrentPanel] = useState(0);
   const [activeImageIndex, setActiveImageIndex] = useState(null);
   const scrollContainerRef = useRef(null);
@@ -18,18 +16,17 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
   const [isVerticalLayout, setIsVerticalLayout] = useState(false);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
 
-  // Track window size for responsive behavior
+  // Track window size for responsive behavior (desktop breakpoint: 1025px)
   useEffect(() => {
     const checkLayout = () => {
-      const breakpoint = imageType === 'mobile' ? 641 : 1025;
-      setIsVerticalLayout(window.innerWidth < breakpoint);
+      setIsVerticalLayout(window.innerWidth < 1025);
       setShowKeyboardHints(window.innerWidth >= 1024);
     };
 
     checkLayout();
     window.addEventListener('resize', checkLayout);
     return () => window.removeEventListener('resize', checkLayout);
-  }, [imageType]);
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -185,7 +182,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
               <FaTimes className="text-base md:text-xl" />
             </button>
 
-            {/* Keyboard Hints - Hidden below 1024px for both instances */}
+            {/* Keyboard Hints - Hidden below 1024px */}
             {showKeyboardHints && (
               <motion.div
                 className={`absolute top-6 left-1/2 -translate-x-1/2 z-[10001] px-5 py-3 bg-[var(--bg-primary)]/90 border-2 border-[var(--accent-cyan)]/50 text-[var(--text-tertiary)] text-xs pixel-text pointer-events-none items-center gap-4 ${
@@ -201,7 +198,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
               >
                 <span>Press <span className="text-[var(--accent-cyan)] mx-1">←</span> <span className="text-[var(--accent-cyan)] mx-1">→</span> to navigate</span>
                 <span className="text-[var(--text-tertiary)]/50">|</span>
-                <span>Press <span className="text-[var(--accent-pink)] mx-1\">ESC</span> to close</span>
+                <span>Press <span className="text-[var(--accent-pink)] mx-1">ESC</span> to close</span>
               </motion.div>
             )}
 
@@ -282,17 +279,17 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     animation: fadeIn 0.4s ease-out;
                   }
 
-                  /* ===== DESKTOP SCREENSHOTS LAYOUT (ADMIN APP) ===== */
-                  /* Keep original layout for desktop images on large screens (≥1025px) */
+                  /* ===== DESKTOP LAYOUT STYLING (Landscape Screenshots) ===== */
 
+                  /* Large screens (≥1025px) - Desktop screenshots horizontal layout */
                   @media (min-width: 1025px) {
                     .desktop-layout {
                       flex-wrap: nowrap;
                     }
 
                     .case-study-panel:has(.desktop-layout) {
-                      padding-left: 7rem !important; /* Space for left arrow */
-                      padding-right: 7rem !important; /* Space for right arrow */
+                      padding-left: 7rem !important;
+                      padding-right: 7rem !important;
                     }
 
                     .case-study-panel:has(.desktop-layout) .case-study-panel-inner {
@@ -309,54 +306,12 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .case-study-panel:has(.desktop-layout) .case-study-mockups {
                       width: 100%;
                       justify-content: center;
-                      margin-bottom: 3rem; /* Extra spacing above pagination dots */
+                      margin-bottom: 3rem;
                     }
                   }
 
-                  /* ===== RESPONSIVE BREAKPOINTS ===== */
-
-                  /* Tablets and small laptops (900px to 1024px) - Use horizontal scroll with 640-900px spacing */
+                  /* Tablets and small laptops (901px to 1024px) */
                   @media (max-width: 1024px) and (min-width: 901px) {
-                    .case-study-panel {
-                      padding: 2rem 1.5rem;
-                      padding-bottom: 5rem;
-                    }
-
-                    .case-study-panel-inner {
-                      flex-direction: column;
-                      gap: 2rem;
-                      justify-content: center;
-                    }
-
-                    .case-study-text-content {
-                      flex: 0 0 auto;
-                      text-align: center;
-                      max-width: 500px;
-                      width: 100%;
-                    }
-
-                    .case-study-mockups {
-                      gap: 1.5rem;
-                      width: 100%;
-                      max-width: 600px;
-                    }
-
-                    .mockup-primary {
-                      height: 45vh !important;
-                      max-height: 420px !important;
-                    }
-
-                    .mockup-secondary {
-                      height: 38vh !important;
-                      max-height: 360px !important;
-                    }
-
-                    .mockup-tertiary {
-                      height: 32vh !important;
-                      max-height: 300px !important;
-                    }
-
-                    /* Admin app - proper spacing and background consistency */
                     .case-study-panel:has(.desktop-layout) {
                       padding: 3rem 2.5rem !important;
                       padding-bottom: 5rem !important;
@@ -398,46 +353,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
 
                   /* Tablets portrait and landscape (641px to 900px) */
                   @media (max-width: 900px) and (min-width: 641px) {
-                    .case-study-panel {
-                      padding: 2rem 1.5rem;
-                      padding-bottom: 5rem;
-                    }
-
-                    .case-study-panel-inner {
-                      flex-direction: column;
-                      gap: 2rem;
-                      justify-content: center;
-                    }
-
-                    .case-study-text-content {
-                      flex: 0 0 auto;
-                      text-align: center;
-                      max-width: 500px;
-                      width: 100%;
-                    }
-
-                    .case-study-mockups {
-                      gap: 1.5rem;
-                      width: 100%;
-                      max-width: 600px;
-                    }
-
-                    .mockup-primary {
-                      height: 45vh !important;
-                      max-height: 420px !important;
-                    }
-
-                    .mockup-secondary {
-                      height: 38vh !important;
-                      max-height: 360px !important;
-                    }
-
-                    .mockup-tertiary {
-                      height: 32vh !important;
-                      max-height: 300px !important;
-                    }
-
-                    /* Admin app - consistent layout with other breakpoints */
                     .case-study-panel:has(.desktop-layout) {
                       padding: 3rem 2rem !important;
                       padding-bottom: 5rem !important;
@@ -477,34 +392,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     }
                   }
 
-                  /* Mobile landscape and small tablets (max-width: 768px) */
-                  @media (max-width: 768px) {
-                    .case-study-panel {
-                      padding: 1.5rem 1.25rem;
-                      padding-bottom: 5rem;
-                    }
-
-                    .case-study-mockups {
-                      gap: 1rem;
-                    }
-
-                    .mockup-primary {
-                      height: 40vh !important;
-                      max-height: 380px !important;
-                    }
-
-                    .mockup-secondary {
-                      height: 34vh !important;
-                      max-height: 320px !important;
-                    }
-
-                    .mockup-tertiary {
-                      height: 28vh !important;
-                      max-height: 260px !important;
-                    }
-                  }
-
-
                   /* ===== VERTICAL SCROLL MODE - Mobile Portrait ===== */
                   @media (max-width: 640px) {
                     /* Scroll container padding for vertical layout */
@@ -533,126 +420,23 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       height: 2rem !important;
                     }
 
-                    /* Intro panel - ensure proper centering and padding */
+                    /* Intro panel */
                     .intro-panel {
                       padding: 3rem 1.5rem !important;
-                      padding-bottom: 10rem !important; /* Extra padding for scroll */
+                      padding-bottom: 10rem !important;
                       background-color: var(--bg-secondary) !important;
                     }
 
-                    /* Mobile layout panels */
-                    .mobile-layout .case-study-panel {
-                      padding: 2rem 1rem !important;
-                      padding-bottom: 10rem !important; /* Significantly increased for full scrollability */
-                      overflow-y: visible;
-                      background-color: var(--bg-secondary) !important;
-                    }
-
-                    .mobile-layout .case-study-panel-inner {
-                      flex-direction: column !important;
-                      gap: 3rem !important; /* Increased spacing between text and images */
-                      justify-content: flex-start !important;
-                      align-items: center !important;
-                      height: auto !important;
-                      min-height: auto !important; /* Remove min-height constraint */
-                    }
-
-                    .mobile-layout .case-study-text-content {
-                      flex: 0 0 auto !important;
-                      text-align: center !important;
-                      gap: 0.625rem;
-                      max-width: 100%;
-                      width: 100%;
-                      z-index: 10;
-                      margin-bottom: 0 !important;
-                    }
-
-                    /* Dribbble-inspired mockups container - keep horizontal layout */
-                    .mobile-layout .case-study-mockups {
-                      position: relative;
-                      width: 100%;
-                      height: auto;
-                      min-height: auto !important;
-                      display: flex !important;
-                      flex-direction: row !important; /* Keep horizontal for Dribbble style */
-                      flex-wrap: wrap !important;
-                      gap: 1.5rem !important;
-                      align-items: center !important;
-                      justify-content: center !important;
-                      max-height: none !important;
-                      margin-top: 0 !important;
-                    }
-
-                    /* Dribbble-style mockups - subtle rotations, stagger, depth */
-                    .mobile-layout .mockup-primary {
-                      position: relative !important;
-                      width: 60% !important;
-                      max-width: 200px !important;
-                      height: auto !important;
-                      transform: rotate(-2deg) translateY(-8px) !important;
-                      z-index: 3 !important;
-                      box-shadow: 0 8px 20px rgba(255, 0, 255, 0.2), 0 12px 32px rgba(0, 255, 255, 0.15) !important;
-                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-                      top: auto !important;
-                      left: auto !important;
-                      right: auto !important;
-                      bottom: auto !important;
-                    }
-
-                    .mobile-layout .mockup-secondary {
-                      position: relative !important;
-                      width: 56% !important;
-                      max-width: 185px !important;
-                      height: auto !important;
-                      transform: rotate(1.5deg) translateY(4px) !important;
-                      z-index: 2 !important;
-                      box-shadow: 0 6px 16px rgba(255, 0, 255, 0.16), 0 10px 28px rgba(0, 255, 255, 0.12) !important;
-                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-                      top: auto !important;
-                      left: auto !important;
-                      right: auto !important;
-                      bottom: auto !important;
-                    }
-
-                    .mobile-layout .mockup-tertiary {
-                      position: relative !important;
-                      width: 52% !important;
-                      max-width: 170px !important;
-                      height: auto !important;
-                      transform: rotate(-1deg) translateY(0px) !important;
-                      z-index: 1 !important;
-                      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.12), 0 8px 24px rgba(0, 255, 255, 0.1) !important;
-                      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-                      top: auto !important;
-                      left: auto !important;
-                      right: auto !important;
-                      bottom: auto !important;
-                    }
-
-                    /* Active state - enhanced interaction */
-                    .mobile-layout .mockup-primary.active-mobile,
-                    .mobile-layout .mockup-secondary.active-mobile,
-                    .mobile-layout .mockup-tertiary.active-mobile {
-                      transform: scale(1.05) rotate(0deg) !important;
-                      z-index: 10 !important;
-                      box-shadow: 0 12px 32px rgba(255, 0, 255, 0.35), 0 16px 48px rgba(0, 255, 255, 0.3) !important;
-                    }
-
-                    /* Single image - centered with subtle tilt */
-                    .mobile-layout .case-study-mockups:has(.mockup-primary:only-child) .mockup-primary {
-                      transform: rotate(-1.5deg) !important;
-                    }
-
-                    /* Desktop layout panels - proper padding, spacing, and background */
+                    /* Desktop layout panels */
                     .case-study-panel:has(.desktop-layout) {
                       padding: 2.5rem 1rem !important;
-                      padding-bottom: 10rem !important; /* Significantly increased for full scrollability */
+                      padding-bottom: 10rem !important;
                       background-color: var(--bg-secondary) !important;
                     }
 
                     .case-study-panel:has(.desktop-layout) .case-study-panel-inner {
                       flex-direction: column !important;
-                      gap: 3rem !important; /* Increased spacing between text and images */
+                      gap: 3rem !important;
                       align-items: center !important;
                       min-height: auto !important;
                     }
@@ -669,7 +453,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .desktop-layout {
                       flex: 0 1 auto !important;
                       flex-direction: column !important;
-                      gap: 2rem !important; /* Spacing between images */
+                      gap: 2rem !important;
                       display: flex !important;
                       position: relative !important;
                       min-height: auto !important;
@@ -682,7 +466,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
                       position: relative !important;
-                      width: calc(100vw - 2rem) !important; /* Full width with margins */
+                      width: calc(100vw - 2rem) !important;
                       max-width: 100% !important;
                       height: auto !important;
                       transform: none !important;
@@ -720,32 +504,10 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       height: 1.75rem !important;
                     }
 
-                    /* Intro panel responsive adjustments */
                     .intro-panel {
                       padding: 2.5rem 1rem !important;
                       padding-bottom: 9rem !important;
                       background-color: var(--bg-secondary) !important;
-                    }
-
-                    .case-study-panel {
-                      padding: 1.5rem 0.875rem !important;
-                      padding-bottom: 9rem !important; /* Increased for full scrollability */
-                    }
-
-                    .mobile-layout .case-study-panel {
-                      padding: 1.75rem 0.875rem !important;
-                      padding-bottom: 9rem !important;
-                      background-color: var(--bg-secondary) !important;
-                    }
-
-                    .mobile-layout .case-study-panel-inner {
-                      gap: 2.75rem !important; /* Maintain good spacing */
-                      min-height: auto !important;
-                    }
-
-                    .case-study-panel-inner {
-                      gap: 2.75rem !important; /* Spacing for desktop layout */
-                      min-height: auto !important;
                     }
 
                     .case-study-panel:has(.desktop-layout) {
@@ -754,11 +516,11 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       background-color: var(--bg-secondary) !important;
                     }
 
-                    .case-study-mockups {
-                      min-height: auto;
+                    .case-study-panel-inner {
+                      gap: 2.75rem !important;
+                      min-height: auto !important;
                     }
 
-                    /* Desktop layout spacing and image sizing */
                     .desktop-layout {
                       flex: 0 1 auto !important;
                       gap: 1.75rem !important;
@@ -768,28 +530,8 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
-                      width: calc(100vw - 1.75rem) !important; /* Maximize width with margins */
+                      width: calc(100vw - 1.75rem) !important;
                       max-width: 100% !important;
-                    }
-
-                    /* Mobile layout - maintain vertical stacking */
-                    .mobile-layout .case-study-mockups {
-                      gap: 1.25rem !important;
-                    }
-
-                    .mobile-layout .mockup-primary {
-                      max-width: 185px !important;
-                      width: 58% !important;
-                    }
-
-                    .mobile-layout .mockup-secondary {
-                      max-width: 170px !important;
-                      width: 54% !important;
-                    }
-
-                    .mobile-layout .mockup-tertiary {
-                      max-width: 155px !important;
-                      width: 50% !important;
                     }
                   }
 
@@ -821,7 +563,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       height: 1.5rem !important;
                     }
 
-                    /* Intro panel responsive adjustments */
                     .intro-panel {
                       padding: 2rem 0.75rem !important;
                       padding-bottom: 8.5rem !important;
@@ -837,26 +578,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .intro-panel p {
                       font-size: clamp(0.9rem, 4vw, 1.05rem) !important;
                       line-height: 1.5 !important;
-                    }
-
-                    .case-study-panel {
-                      padding: 1.5rem 0.75rem !important;
-                      padding-bottom: 8.5rem !important; /* Increased for full scrollability */
-                    }
-
-                    .mobile-layout .case-study-panel {
-                      padding: 1.5rem 0.75rem !important;
-                      padding-bottom: 8.5rem !important;
-                      background-color: var(--bg-secondary) !important;
-                    }
-
-                    .case-study-panel-inner {
-                      gap: 2.5rem !important; /* Increased spacing */
-                      min-height: auto !important;
-                    }
-
-                    .mobile-layout .case-study-panel-inner {
-                      gap: 2.5rem !important; /* Maintain good spacing for mobile layout */
                     }
 
                     .case-study-panel:has(.desktop-layout) {
@@ -875,39 +596,15 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       line-height: 1.55 !important;
                     }
 
-                    .case-study-mockups {
-                      min-height: auto;
-                    }
-
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
-                      width: calc(100vw - 1.5rem) !important; /* Maximize width with responsive margins */
+                      width: calc(100vw - 1.5rem) !important;
                       max-width: 100% !important;
-                    }
-
-                    /* Mobile layout - maintain vertical stacking */
-                    .mobile-layout .case-study-mockups {
-                      gap: 1.25rem !important;
-                    }
-
-                    .mobile-layout .mockup-primary {
-                      max-width: 175px !important;
-                      width: 58% !important;
-                    }
-
-                    .mobile-layout .mockup-secondary {
-                      max-width: 160px !important;
-                      width: 54% !important;
-                    }
-
-                    .mobile-layout .mockup-tertiary {
-                      max-width: 145px !important;
-                      width: 50% !important;
                     }
                   }
 
-                  /* Extra small screens (320px) - Production ready! */
+                  /* Extra small screens (320px) */
                   @media (max-width: 320px) {
                     /* Scroll container padding */
                     .scroll-container {
@@ -935,7 +632,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       height: 1.375rem !important;
                     }
 
-                    /* Intro panel responsive adjustments */
                     .intro-panel {
                       padding: 1.75rem 0.625rem !important;
                       padding-bottom: 8rem !important;
@@ -951,26 +647,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .intro-panel p {
                       font-size: clamp(0.85rem, 4.2vw, 1rem) !important;
                       line-height: 1.5 !important;
-                    }
-
-                    .case-study-panel {
-                      padding: 1.25rem 0.625rem !important;
-                      padding-bottom: 8rem !important; /* Increased for full scrollability */
-                    }
-
-                    .mobile-layout .case-study-panel {
-                      padding: 1.25rem 0.625rem !important;
-                      padding-bottom: 8rem !important;
-                      background-color: var(--bg-secondary) !important;
-                    }
-
-                    .case-study-panel-inner {
-                      gap: 2.25rem !important; /* Maintain spacing */
-                      min-height: auto !important;
-                    }
-
-                    .mobile-layout .case-study-panel-inner {
-                      gap: 2.25rem !important; /* Maintain good spacing for mobile layout */
                     }
 
                     .case-study-panel:has(.desktop-layout) {
@@ -989,40 +665,15 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       line-height: 1.5 !important;
                     }
 
-                    .case-study-mockups {
-                      min-height: auto;
-                    }
-
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
-                      width: calc(100vw - 1.25rem) !important; /* Maximize width with minimal margins */
+                      width: calc(100vw - 1.25rem) !important;
                       max-width: 100% !important;
-                    }
-
-                    /* Mobile layout - maintain vertical stacking */
-                    .mobile-layout .case-study-mockups {
-                      gap: 1rem !important;
-                    }
-
-                    .mobile-layout .mockup-primary {
-                      max-width: 160px !important;
-                      width: 56% !important;
-                    }
-
-                    .mobile-layout .mockup-secondary {
-                      max-width: 145px !important;
-                      width: 52% !important;
-                    }
-
-                    .mobile-layout .mockup-tertiary {
-                      max-width: 130px !important;
-                      width: 48% !important;
                     }
                   }
 
-                  /* ===== PROFESSOR TOOLS - SMALL SCREENS (below 450px) ===== */
-                  /* Best practices: Optimal typography scale and spacing for readability */
+                  /* Best practices for small screens (below 450px) */
                   @media (max-width: 450px) {
                     /* Scroll container padding */
                     .scroll-container {
@@ -1049,7 +700,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       height: 1.625rem !important;
                     }
 
-                    /* Intro panel - optimized for small screens */
                     .intro-panel {
                       padding: 2rem 1.25rem !important;
                       padding-bottom: 8.5rem !important;
@@ -1057,10 +707,10 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     }
 
                     .intro-panel h1 {
-                      font-size: clamp(1.75rem, 5.2vw, 2.5rem) !important; /* Fluid typography */
+                      font-size: clamp(1.75rem, 5.2vw, 2.5rem) !important;
                       line-height: 1.15 !important;
                       margin-bottom: 1.25rem !important;
-                      letter-spacing: -0.02em !important; /* Tighter tracking for better fit */
+                      letter-spacing: -0.02em !important;
                     }
 
                     .intro-panel p {
@@ -1076,40 +726,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       padding: 0.5rem 0.75rem !important;
                     }
 
-                    /* Feature panels - balanced hierarchy */
-                    .case-study-panel {
-                      padding: 2.25rem 1.25rem !important;
-                      padding-bottom: 9rem !important;
-                    }
-
-                    .case-study-panel-inner {
-                      gap: 2.5rem !important;
-                    }
-
-                    .case-study-text-content {
-                      gap: 0.75rem !important;
-                      padding: 0 0.25rem !important;
-                    }
-
-                    .case-study-text-content .pixel-text {
-                      font-size: 0.65rem !important;
-                      letter-spacing: 0.05em !important;
-                    }
-
-                    .case-study-text-content h2 {
-                      font-size: clamp(1.5rem, 4.8vw, 2rem) !important;
-                      line-height: 1.2 !important;
-                      margin-bottom: 0.75rem !important;
-                      letter-spacing: -0.01em !important;
-                    }
-
-                    .case-study-text-content p {
-                      font-size: clamp(0.875rem, 3.4vw, 1rem) !important;
-                      line-height: 1.55 !important;
-                      max-width: 100% !important;
-                    }
-
-                    /* Desktop layout - optimized spacing and background */
                     .case-study-panel:has(.desktop-layout) {
                       padding: 2.25rem 1.25rem !important;
                       padding-bottom: 9rem !important;
@@ -1130,7 +746,6 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                       line-height: 1.55 !important;
                     }
 
-                    /* Desktop mockups - better spacing and sizing */
                     .desktop-layout {
                       flex: 0 1 auto !important;
                       gap: 1.75rem !important;
@@ -1140,7 +755,7 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                     .desktop-layout .mockup-primary,
                     .desktop-layout .mockup-secondary,
                     .desktop-layout .mockup-tertiary {
-                      width: calc(100vw - 2.5rem) !important; /* Responsive width with margins */
+                      width: calc(100vw - 2.5rem) !important;
                       max-width: 100% !important;
                     }
                   }
@@ -1179,9 +794,8 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
               {/* Feature Panels */}
               {caseStudy.panels.map((panel, index) => {
                 const totalMockups = panel.mockups.length;
-                // Admin app (desktop) uses consistent bg-secondary, mobile apps use alternating colors
-                const bgColor = imageType === 'desktop' ? 'var(--bg-secondary)' :
-                                (index % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-primary)');
+                // Admin app uses consistent bg-secondary
+                const bgColor = 'var(--bg-secondary)';
 
                 return (
                   <div
@@ -1214,49 +828,27 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                         </p>
                       </div>
 
-                      {/* Mockups Container */}
-                      <div className={`case-study-mockups ${imageType === 'desktop' ? 'desktop-layout' : 'mobile-layout'} flex-1 flex ${imageType === 'desktop' ? 'gap-4' : 'gap-6'} items-center justify-center animate-fade-in relative`}>
+                      {/* Mockups Container - Desktop Layout */}
+                      <div className="case-study-mockups desktop-layout flex-1 flex gap-4 items-center justify-center animate-fade-in relative">
                         {panel.mockups.map((mockup, mockupIndex) => {
                           const imageKey = `${index}-${mockupIndex}`;
                           const isActive = activeImageIndex === imageKey;
 
-                          // Calculate responsive dimensions based on imageType and number of mockups
-                          let mockupHeight, mockupMaxHeight, mockupWidth, mockupMaxWidth, mockupClass;
+                          // Desktop screenshots - width-based sizing
+                          let mockupWidth, mockupMaxWidth, mockupClass;
 
-                          if (imageType === 'desktop') {
-                            // Desktop screenshots - significantly larger dimensions
-                            if (totalMockups === 1) {
-                              mockupWidth = '95%';
-                              mockupMaxWidth = '1600px';
-                              mockupClass = 'mockup-primary';
-                            } else if (totalMockups === 2) {
-                              mockupWidth = '48%';
-                              mockupMaxWidth = '850px';
-                              mockupClass = mockupIndex === 0 ? 'mockup-primary' : 'mockup-secondary';
-                            } else {
-                              mockupWidth = '31%';
-                              mockupMaxWidth = '550px';
-                              mockupClass = mockupIndex === 0 ? 'mockup-primary' : mockupIndex === 1 ? 'mockup-secondary' : 'mockup-tertiary';
-                            }
-                            mockupHeight = 'auto';
-                            mockupMaxHeight = 'none';
+                          if (totalMockups === 1) {
+                            mockupWidth = '95%';
+                            mockupMaxWidth = '1600px';
+                            mockupClass = 'mockup-primary';
+                          } else if (totalMockups === 2) {
+                            mockupWidth = '48%';
+                            mockupMaxWidth = '850px';
+                            mockupClass = mockupIndex === 0 ? 'mockup-primary' : 'mockup-secondary';
                           } else {
-                            // Mobile screenshots - original sizing logic
-                            if (totalMockups === 1) {
-                              mockupHeight = '65vh';
-                              mockupMaxHeight = '600px';
-                              mockupClass = 'mockup-primary';
-                            } else if (totalMockups === 2) {
-                              mockupHeight = mockupIndex === 0 ? '60vh' : '55vh';
-                              mockupMaxHeight = mockupIndex === 0 ? '560px' : '520px';
-                              mockupClass = mockupIndex === 0 ? 'mockup-primary' : 'mockup-secondary';
-                            } else {
-                              mockupHeight = mockupIndex === 0 ? '65vh' : mockupIndex === 1 ? '50vh' : '42vh';
-                              mockupMaxHeight = mockupIndex === 0 ? '600px' : mockupIndex === 1 ? '460px' : '380px';
-                              mockupClass = mockupIndex === 0 ? 'mockup-primary' : mockupIndex === 1 ? 'mockup-secondary' : 'mockup-tertiary';
-                            }
-                            mockupWidth = 'auto';
-                            mockupMaxWidth = 'none';
+                            mockupWidth = '31%';
+                            mockupMaxWidth = '550px';
+                            mockupClass = mockupIndex === 0 ? 'mockup-primary' : mockupIndex === 1 ? 'mockup-secondary' : 'mockup-tertiary';
                           }
 
                           // Calculate horizontal shift for neighboring images
@@ -1276,11 +868,10 @@ export default function CaseStudyModal({ isOpen, onClose, caseStudy, imageType =
                           return (
                             <motion.div
                               key={mockupIndex}
-                              className={`${mockupClass} relative overflow-hidden bg-[var(--bg-tertiary)] border-2 border-[var(--accent-cyan)]/30 hover:border-[var(--accent-cyan)] cursor-pointer ${isActive ? 'zoomed-image active-mobile' : ''}`}
+                              className={`${mockupClass} relative overflow-hidden bg-[var(--bg-tertiary)] border-2 border-[var(--accent-cyan)]/30 hover:border-[var(--accent-cyan)] cursor-pointer ${isActive ? 'zoomed-image' : ''}`}
                               style={{
                                 borderRadius: '0.5rem',
-                                height: mockupHeight,
-                                maxHeight: mockupMaxHeight,
+                                height: 'auto',
                                 width: mockupWidth,
                                 maxWidth: mockupMaxWidth,
                                 willChange: 'transform, opacity',

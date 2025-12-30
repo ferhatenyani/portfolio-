@@ -6,7 +6,8 @@ import PixelText from '../components/PixelText';
 import AnimatedText from '../components/AnimatedText';
 import PixelThemeBlock from '../components/PixelThemeBlock';
 import ProjectModal from '../components/ProjectModal';
-import CaseStudyModal from '../components/CaseStudyModal';
+import UserCaseStudy from '../components/UserCaseStudy';
+import AdminCaseStudy from '../components/AdminCaseStudy';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 /**
@@ -18,9 +19,11 @@ export default function Projects() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
-  // State for CaseStudyModal (Medical AI)
-  const [caseStudyModalOpen, setCaseStudyModalOpen] = useState(false);
-  const [currentCaseStudy, setCurrentCaseStudy] = useState(null);
+  // State for UserCaseStudy (Medical AI - Student Interface)
+  const [userCaseStudyOpen, setUserCaseStudyOpen] = useState(false);
+
+  // State for AdminCaseStudy (Medical AI - Admin Interface)
+  const [adminCaseStudyOpen, setAdminCaseStudyOpen] = useState(false);
 
   const openProjectModal = (projectData) => {
     setCurrentProject(projectData);
@@ -32,14 +35,20 @@ export default function Projects() {
     setTimeout(() => setCurrentProject(null), 200);
   };
 
-  const openCaseStudyModal = (caseStudy) => {
-    setCurrentCaseStudy(caseStudy);
-    setCaseStudyModalOpen(true);
+  const openUserCaseStudy = () => {
+    setUserCaseStudyOpen(true);
   };
 
-  const closeCaseStudyModal = () => {
-    setCaseStudyModalOpen(false);
-    setTimeout(() => setCurrentCaseStudy(null), 300);
+  const closeUserCaseStudy = () => {
+    setUserCaseStudyOpen(false);
+  };
+
+  const openAdminCaseStudy = () => {
+    setAdminCaseStudyOpen(true);
+  };
+
+  const closeAdminCaseStudy = () => {
+    setAdminCaseStudyOpen(false);
   };
 
   // Case Study Data - Medical AI Chatbot (Student Interface)
@@ -494,7 +503,7 @@ export default function Projects() {
                         }}
                         onClick={() => {
                           if (project.id === 2) {
-                            openCaseStudyModal(medicalAICaseStudy);
+                            openUserCaseStudy();
                           } else {
                             openProjectModal({
                               ...project.userApp.modalContent,
@@ -548,7 +557,7 @@ export default function Projects() {
                         }}
                         onClick={() => {
                           if (project.id === 2) {
-                            openCaseStudyModal(medicalAIProfessorCaseStudy);
+                            openAdminCaseStudy();
                           } else {
                             openProjectModal({
                               ...project.adminApp.modalContent,
@@ -600,12 +609,18 @@ export default function Projects() {
         project={currentProject}
       />
 
-      {/* Case Study Modal - For Medical AI */}
-      <CaseStudyModal
-        isOpen={caseStudyModalOpen}
-        onClose={closeCaseStudyModal}
-        caseStudy={currentCaseStudy}
-        imageType={currentCaseStudy?.imageType || 'mobile'}
+      {/* User Case Study Modal - For Medical AI Student Interface */}
+      <UserCaseStudy
+        isOpen={userCaseStudyOpen}
+        onClose={closeUserCaseStudy}
+        caseStudy={medicalAICaseStudy}
+      />
+
+      {/* Admin Case Study Modal - For Medical AI Admin Interface */}
+      <AdminCaseStudy
+        isOpen={adminCaseStudyOpen}
+        onClose={closeAdminCaseStudy}
+        caseStudy={medicalAIProfessorCaseStudy}
       />
     </section>
   );
