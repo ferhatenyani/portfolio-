@@ -484,7 +484,7 @@ export default function AdminCaseStudy({ isOpen, onClose, caseStudy }) {
                           : 'w-full mt-6'
                       }`}>
                         <motion.div
-                          className="relative w-full"
+                          className="relative"
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: zoomedFrame === frameIndex ? 1.02 : 1 }}
                           transition={{ duration: 0.4 }}
@@ -494,7 +494,7 @@ export default function AdminCaseStudy({ isOpen, onClose, caseStudy }) {
                               zoomedFrame === frameIndex
                                 ? 'border-[var(--accent-cyan)] shadow-[0_0_30px_rgba(0,255,255,0.4)]'
                                 : 'border-[var(--accent-cyan)]/30 hover:border-[var(--accent-cyan)]/60'
-                            } cursor-pointer transition-all duration-300`}
+                            } cursor-pointer transition-all duration-300 inline-block`}
                             style={{
                               borderRadius: '0.75rem'
                             }}
@@ -503,13 +503,14 @@ export default function AdminCaseStudy({ isOpen, onClose, caseStudy }) {
                             <img
                               src={frame.mockup.src}
                               alt={frame.mockup.alt}
-                              className="w-full h-auto"
+                              className="block"
                               style={{
                                 background: 'var(--bg-primary)',
                                 borderRadius: '0.75rem',
-                                maxHeight: isVerticalLayout ? '60vh' : '75vh',
-                                display: 'block',
-                                objectFit: isVerticalLayout ? 'cover' : 'contain'
+                                maxHeight: isVerticalLayout ? '50vh' : '75vh',
+                                width: 'auto',
+                                height: 'auto',
+                                maxWidth: '100%'
                               }}
                               loading="lazy"
                             />
