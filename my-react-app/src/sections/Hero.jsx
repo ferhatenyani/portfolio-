@@ -232,7 +232,7 @@ export default function Hero() {
                   }}
                 >
                   <AnimatedText delay={baseDelay + 0.7} stagger={0.012} scrollTrigger={false} glitchIntensity="low" variant="simple">
-                    Crafting intuitive, high-performance web experiences with React, Next.js & modern design systems.
+                    Designing in Figma, building in TypeScript, and animating with Framer Motion — shipping polished, performant interfaces.
                   </AnimatedText>
                 </p>
               </div>
@@ -315,7 +315,7 @@ export default function Hero() {
               }}
             >
               <AnimatedText delay={baseDelay + 0.6} stagger={0.015} scrollTrigger={false} glitchIntensity="low" variant="simple">
-                Crafting intuitive, high-performance web experiences with React, Next.js & modern design systems.
+                Designing in Figma, building in TypeScript, and animating with Framer Motion — shipping polished, performant interfaces.
               </AnimatedText>
             </p>
           </motion.div>

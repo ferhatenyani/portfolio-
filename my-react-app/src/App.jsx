@@ -2,11 +2,7 @@ import { useEffect } from 'react';
 import PixelCursor from './components/PixelCursor';
 import ThemeToggle from './components/ThemeToggle';
 import Hero from './sections/Hero';
-import About from './sections/About';
-import AboutOption3 from './sections/AboutOption3';
-import AboutOption3_Layout1 from './sections/AboutOption3_Layout1';
-import AboutOption3_Layout2 from './sections/AboutOption3_Layout2';
-import AboutOption3_Layout3 from './sections/AboutOption3_Layout3';
+import AboutMe from './sections/AboutMe';
 import Skills from './sections/Skills';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
@@ -37,11 +33,7 @@ function App() {
       {/* Main Content */}
       <main>
         <Hero />
-        <About />
-        <AboutOption3 />
-        <AboutOption3_Layout1 />
-        <AboutOption3_Layout2 />
-        <AboutOption3_Layout3 />
+        <AboutMe />
         <Skills />
         <Projects />
         <Contact />
