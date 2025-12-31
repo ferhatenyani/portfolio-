@@ -101,7 +101,7 @@ export default function AboutMe() {
                         Ferhaten — UI/UX designer & frontend developer crafting web experiences with soul, speed, and precision.
                       </p>
                       <p>
-                        I design in Figma, build with React + TypeScript, style with Tailwind, and bring interfaces to life using Framer Motion and GSAP — delivering production-ready products like embedded SaaS analytics dashboards, AI-powered medical assistants, and modern e-commerce web apps that perform flawlessly and drive real results.
+                        I design in Figma, build with React + TypeScript, style with Tailwind, and bring interfaces to life using Framer Motion — delivering production-ready products like embedded SaaS analytics dashboards, AI-powered medical assistants, and modern e-commerce web apps that perform flawlessly and drive real results.
                       </p>
                       <p>
                         Final-year Computer Science student actively freelancing and shipping personal projects reaching thousands of users, with a sharp focus on accessibility, performance, and scalable design systems.
