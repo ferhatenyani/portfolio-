@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import PixelBorder from '../components/PixelBorder';
 import PixelDegrade from '../components/PixelDegrade';
 import PixelText from '../components/PixelText';
@@ -6,33 +7,61 @@ import PixelText from '../components/PixelText';
 /**
  * About Me Section - Data Chip Design
  * Bio structured like a futuristic ID card/data chip with modules
+ * Accordion-style sections for mobile (< 600px)
  */
 export default function AboutMe() {
+  const [openSection, setOpenSection] = useState(0);
+
+  const bioSections = [
+    {
+      id: 0,
+      label: "OVERVIEW",
+      content: "Ferhaten — UI/UX designer & frontend developer crafting web experiences with soul, speed, and precision.",
+      preview: "Ferhaten — UI/UX designer & frontend developer crafting web experiences..."
+    },
+    {
+      id: 1,
+      label: "EXPERTISE",
+      content: "I design in Figma, build with React + TypeScript, style with Tailwind, and bring interfaces to life using Framer Motion — delivering production-ready products like embedded SaaS analytics dashboards, AI-powered medical assistants, and modern e-commerce web apps that perform flawlessly and drive real results.",
+      preview: "I design in Figma, build with React + TypeScript, style with Tailwind..."
+    },
+    {
+      id: 2,
+      label: "BACKGROUND",
+      content: "Final-year Computer Science student actively freelancing and shipping personal projects reaching thousands of users, with a sharp focus on accessibility, performance, and scalable design systems.",
+      preview: "Final-year Computer Science student actively freelancing and shipping personal projects..."
+    }
+  ];
+
+  const toggleSection = (id) => {
+    setOpenSection(openSection === id ? null : id);
+  };
+
   return (
-    <section id="about" className="relative py-16 md:py-20 px-6 overflow-hidden">
+    <section id="about" className="relative py-10 [@media(min-width:375px)]:py-11 [@media(min-width:480px)]:py-12 sm:py-16 md:py-20 px-4 [@media(min-width:375px)]:px-5 sm:px-6 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--accent-pink)] to-transparent opacity-30" />
 
       <div className="max-w-6xl mx-auto">
         {/* Section Title - Skills Style */}
         <motion.div
-          className="mb-12 md:mb-16 text-center"
+          className="mb-8 [@media(min-width:375px)]:mb-9 [@media(min-width:480px)]:mb-10 sm:mb-12 md:mb-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, margin: "-30px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
         >
-          <span className="pixel-text text-xs sm:text-sm text-[var(--accent-cyan)] mb-2 block">
+          <span className="pixel-text text-[var(--accent-cyan)] mb-2 block" style={{ fontSize: 'clamp(0.7rem, 3vw, 0.875rem)' }}>
             <PixelText delay={0.1} stagger={0.02}>
               // About me
             </PixelText>
           </span>
-          
+
         </motion.div>
 
         {/* Data Chip Container - Wider for Large Screens */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-[90%] [@media(min-width:375px)]:max-w-[88%] [@media(min-width:480px)]:max-w-[85%] sm:max-w-2xl md:max-w-3xl mx-auto">
           <PixelDegrade delay={0.4}>
             <motion.div
               className="relative"
@@ -45,22 +74,22 @@ export default function AboutMe() {
               <div
                 className="relative bg-[var(--bg-secondary)] overflow-hidden"
                 style={{
-                  clipPath: 'polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)',
+                  clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)',
                 }}
               >
                 <PixelBorder delay={0.5}>
                   {/* Header Module - Profile Label */}
                   <motion.div
-                    className="bg-[var(--bg-tertiary)] p-4 md:p-6 border-b-2 border-[var(--accent-cyan)]"
+                    className="bg-[var(--bg-tertiary)] p-3 [@media(min-width:375px)]:p-3.5 [@media(min-width:480px)]:p-4 sm:p-4 md:p-6 border-b-2 border-[var(--accent-cyan)]"
                     initial={{ opacity: 0, y: -20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-3 [@media(min-width:480px)]:gap-4 md:gap-6">
                       {/* Profile Image */}
                       <motion.div
-                        className="w-16 h-16 md:w-20 md:h-20 bg-[var(--bg-secondary)] border-2 border-[var(--accent-cyan)] relative overflow-hidden"
+                        className="w-12 h-12 [@media(min-width:375px)]:w-13 [@media(min-width:375px)]:h-13 [@media(min-width:480px)]:w-14 [@media(min-width:480px)]:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[var(--bg-secondary)] border-2 border-[var(--accent-cyan)] relative overflow-hidden flex-shrink-0"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -75,12 +104,12 @@ export default function AboutMe() {
 
                       {/* Profile ID - Moved to Right */}
                       <div className="text-right">
-                        <p className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+                        <p className="font-mono text-[var(--text-tertiary)] uppercase tracking-wider" style={{ fontSize: 'clamp(0.65rem, 2.5vw, 0.75rem)' }}>
                           PROFILE ID
                         </p>
                         <p
-                          className="text-xl md:text-2xl font-bold text-[var(--accent-cyan)]"
-                          style={{ fontFamily: 'var(--font-tech)' }}
+                          className="font-bold text-[var(--accent-cyan)]"
+                          style={{ fontFamily: 'var(--font-tech)', fontSize: 'clamp(1.125rem, 5vw, 1.5rem)' }}
                         >
                           FERHATEN
                         </p>
@@ -88,15 +117,80 @@ export default function AboutMe() {
                     </div>
                   </motion.div>
 
-                  {/* Bio Module - No Scroll on Large Screens */}
+                  {/* Bio Module - ACCORDION ON MOBILE */}
                   <motion.div
-                    className="p-6 md:p-8 lg:p-10"
+                    className="p-4 [@media(min-width:375px)]:p-4.5 [@media(min-width:480px)]:p-5 sm:p-6 md:p-8 lg:p-10"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.8 }}
                   >
-                    <div className="space-y-4 md:space-y-5 text-sm md:text-base lg:text-lg text-[var(--text-secondary)] leading-relaxed">
+                    {/* Mobile: Accordion sections */}
+                    <div className="[@media(max-width:599px)]:block hidden">
+                      <div className="space-y-2">
+                        {bioSections.map((section, index) => (
+                          <div key={section.id} className="border border-[var(--text-tertiary)] border-opacity-20 overflow-hidden">
+                            {/* Accordion Header */}
+                            <button
+                              onClick={() => toggleSection(section.id)}
+                              className="w-full text-left bg-[var(--bg-tertiary)] hover:bg-opacity-80 transition-all"
+                            >
+                              {/* Header Row */}
+                              <div className="flex items-center justify-between p-2.5 pb-1.5">
+                                <span className="font-mono text-[var(--accent-cyan)] uppercase tracking-wider" style={{ fontSize: 'clamp(0.65rem, 2.8vw, 0.75rem)' }}>
+                                  {section.label}
+                                </span>
+
+                                {/* Chevron Indicator */}
+                                <motion.div
+                                  className="text-[var(--accent-cyan)] font-mono flex-shrink-0"
+                                  animate={{ rotate: openSection === section.id ? 180 : 0 }}
+                                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                                  style={{ fontSize: 'clamp(0.7rem, 3vw, 0.85rem)' }}
+                                >
+                                  ▼
+                                </motion.div>
+                              </div>
+
+                              {/* Preview Text (always visible) */}
+                              <div className="px-2.5 pb-2.5">
+                                <p className="text-[var(--text-secondary)] leading-relaxed" style={{ fontSize: 'clamp(0.75rem, 3vw, 0.85rem)' }}>
+                                  {section.preview}{' '}
+                                  {openSection !== section.id && (
+                                    <span className="text-[var(--accent-cyan)] font-medium">Read more</span>
+                                  )}
+                                </p>
+                              </div>
+                            </button>
+
+                            {/* Accordion Content (Remaining Text) */}
+                            <AnimatePresence>
+                              {openSection === section.id && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="px-2.5 pb-2.5 text-[var(--text-secondary)] leading-relaxed" style={{ fontSize: 'clamp(0.8rem, 3.2vw, 1rem)' }}>
+                                    {section.content.replace(section.preview, '')}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* CTA below accordion */}
+                      <p className="text-[var(--accent-cyan)] font-medium mt-4 text-center" style={{ fontSize: 'clamp(0.85rem, 3.5vw, 1rem)' }}>
+                        Let's build something exceptional together.
+                      </p>
+                    </div>
+
+                    {/* Desktop: Normal view (600px+) */}
+                    <div className="[@media(max-width:599px)]:hidden block space-y-3 [@media(min-width:480px)]:space-y-3.5 sm:space-y-4 md:space-y-5 text-[var(--text-secondary)] leading-relaxed" style={{ fontSize: 'clamp(0.875rem, 3.5vw, 1.125rem)' }}>
                       <p>
                         Ferhaten — UI/UX designer & frontend developer crafting web experiences with soul, speed, and precision.
                       </p>
@@ -106,7 +200,7 @@ export default function AboutMe() {
                       <p>
                         Final-year Computer Science student actively freelancing and shipping personal projects reaching thousands of users, with a sharp focus on accessibility, performance, and scalable design systems.
                       </p>
-                      <p className="text-[var(--accent-cyan)] font-medium mt-6 md:mt-8">
+                      <p className="text-[var(--accent-cyan)] font-medium mt-4 [@media(min-width:480px)]:mt-5 sm:mt-6 md:mt-8" style={{ fontSize: 'clamp(0.9rem, 3.75vw, 1.15rem)' }}>
                         Let's build something exceptional together.
                       </p>
                     </div>
@@ -114,21 +208,21 @@ export default function AboutMe() {
 
                   {/* Bottom Info Module - Location, Age & Status */}
                   <motion.div
-                    className="bg-[var(--bg-tertiary)] p-4 md:p-6 border-t-2 border-[var(--accent-pink)]"
+                    className="bg-[var(--bg-tertiary)] p-3 [@media(min-width:375px)]:p-3.5 [@media(min-width:480px)]:p-4 sm:p-4 md:p-6 border-t-2 border-[var(--accent-pink)]"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 1.0 }}
                   >
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-3 gap-2 [@media(min-width:375px)]:gap-2.5 [@media(min-width:480px)]:gap-3 sm:gap-4 md:gap-6">
                       {/* Location */}
                       <div>
-                        <p className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
+                        <p className="font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-1.5 [@media(min-width:480px)]:mb-2" style={{ fontSize: 'clamp(0.625rem, 2.5vw, 0.75rem)' }}>
                           LOCATION
                         </p>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-[var(--accent-pink)]" />
-                          <span className="text-sm md:text-base font-mono text-[var(--accent-pink)]">
+                        <div className="flex items-center gap-1 [@media(min-width:375px)]:gap-1.5 [@media(min-width:480px)]:gap-2">
+                          <div className="w-1.5 h-1.5 [@media(min-width:480px)]:w-2 [@media(min-width:480px)]:h-2 bg-[var(--accent-pink)] flex-shrink-0" />
+                          <span className="font-mono text-[var(--accent-pink)] truncate" style={{ fontSize: 'clamp(0.7rem, 3vw, 1rem)' }}>
                             ALGERIA
                           </span>
                         </div>
@@ -136,25 +230,25 @@ export default function AboutMe() {
 
                       {/* Age */}
                       <div>
-                        <p className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
+                        <p className="font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-1.5 [@media(min-width:480px)]:mb-2" style={{ fontSize: 'clamp(0.625rem, 2.5vw, 0.75rem)' }}>
                           AGE
                         </p>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-[var(--accent-cyan)]" />
-                          <span className="text-sm md:text-base font-mono text-[var(--accent-cyan)]">
+                        <div className="flex items-center gap-1 [@media(min-width:375px)]:gap-1.5 [@media(min-width:480px)]:gap-2">
+                          <div className="w-1.5 h-1.5 [@media(min-width:480px)]:w-2 [@media(min-width:480px)]:h-2 bg-[var(--accent-cyan)] flex-shrink-0" />
+                          <span className="font-mono text-[var(--accent-cyan)]" style={{ fontSize: 'clamp(0.7rem, 3vw, 1rem)' }}>
                             23
                           </span>
                         </div>
                       </div>
 
                       {/* Status - Available for Work */}
-                      <div className="col-span-2 md:col-span-1">
-                        <p className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
+                      <div>
+                        <p className="font-mono text-[var(--text-tertiary)] uppercase tracking-wider mb-1.5 [@media(min-width:480px)]:mb-2" style={{ fontSize: 'clamp(0.625rem, 2.5vw, 0.75rem)' }}>
                           STATUS
                         </p>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 [@media(min-width:375px)]:gap-1.5 [@media(min-width:480px)]:gap-2">
                           <motion.div
-                            className="w-2 h-2 bg-[var(--accent-cyan)]"
+                            className="w-1.5 h-1.5 [@media(min-width:480px)]:w-2 [@media(min-width:480px)]:h-2 bg-[var(--accent-cyan)] flex-shrink-0"
                             animate={{
                               opacity: [1, 0.3, 1],
                             }}
@@ -164,7 +258,7 @@ export default function AboutMe() {
                               ease: "easeInOut"
                             }}
                           />
-                          <span className="text-sm md:text-base font-mono text-[var(--accent-cyan)]">
+                          <span className="font-mono text-[var(--accent-cyan)] truncate" style={{ fontSize: 'clamp(0.7rem, 3vw, 1rem)' }}>
                             AVAILABLE FOR WORK
                           </span>
                         </div>
@@ -209,14 +303,14 @@ export default function AboutMe() {
 
               {/* Corner Notch Accents */}
               <motion.div
-                className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[var(--accent-cyan)]"
+                className="absolute top-0 left-0 w-3 h-3 [@media(min-width:480px)]:w-4 [@media(min-width:480px)]:h-4 border-t-2 border-l-2 border-[var(--accent-cyan)]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 1.3 }}
               />
               <motion.div
-                className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[var(--accent-pink)]"
+                className="absolute bottom-0 right-0 w-3 h-3 [@media(min-width:480px)]:w-4 [@media(min-width:480px)]:h-4 border-b-2 border-r-2 border-[var(--accent-pink)]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}

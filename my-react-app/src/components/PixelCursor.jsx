@@ -35,6 +35,13 @@ export default function PixelCursor() {
   }, []);
 
   useEffect(() => {
+    // Disable cursor on mobile/tablet devices
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (isMobile) {
+      document.body.style.cursor = 'auto';
+      return;
+    }
+
     let targetX = 0;
     let targetY = 0;
 
@@ -67,6 +74,10 @@ export default function PixelCursor() {
       }
     };
   }, [cursorX, cursorY, updateCursorType]);
+
+  // Don't render cursor on mobile/tablet
+  const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+  if (isMobile) return null;
 
   return (
     <motion.div
